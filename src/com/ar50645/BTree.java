@@ -31,10 +31,10 @@ public class BTree<T extends Comparable<T>> {
 
     public boolean addKey(T keyToAdd){
         if(root == null){
-            initializeRootAndAddKey(keyToAdd);
+            initializeRoot(keyToAdd);
             return true;
         }
-        Node<T> node = this.root;
+        Node<T> node = root;
         while (node != null) {
             if(node.getChildrenSize() == 0){
                 node.addKey(keyToAdd);
@@ -77,28 +77,60 @@ public class BTree<T extends Comparable<T>> {
         return node;
     }
 
-    private void initializeRootAndAddKey(T key){
+    private void initializeRoot(T key){
         root = new Node<>(null);
         root.addKey(key);
     }
 
-    private void split(Node<T> nodeToSplit) {
-        Node<T> node = nodeToSplit;
-        int numberOfKeys = node.getKeysSize();
-        int medianIndex = numberOfKeys / 2;
+    private void split(Node<T> node) {
+
+        int medianIndex = node.getKeysSize() / 2;
         T medianValue = node.getKey(medianIndex);
 
-        Node<T> left = new Node<>(null);
-        for (int i = 0; i < medianIndex; i++) {
-            left.addKey(node.getKey(i));
-        }
-        if (node.getChildrenSize() > 0) {
-            for (int j = 0; j <= medianIndex; j++) {
-                Node<T> c = node.getChild(j);
-                left.addChild(c);
-            }
-        }
+        Node<T> left = createLeftNode(node);
+        Node<T> right = createRightNode(node);
 
+        // new root, height of tree is increased
+        if (node.getParent() == null) {
+            createNewRoot(node, left, right);
+
+        }
+        // Move the median value up to the parent
+        else {
+            adjustMedianUpToParent(node, left, right);
+        }
+    }
+
+    private void adjustMedianUpToParent(Node<T> node, Node<T> left, Node<T> right) {
+        int medianIndex = node.getKeysSize() / 2;
+        T medianValue = node.getKey(medianIndex);
+
+        Node<T> parent = node.getParent();
+        parent.addKey(medianValue);
+        parent.removeChild(node);
+        parent.addChild(left);
+        parent.addChild(right);
+
+        if (parent.getKeysSize() > maxNumberOfKeys){
+            split(parent);
+        }
+    }
+
+    private void createNewRoot(Node<T> node, Node<T> left, Node<T> right) {
+        int medianIndex = node.getKeysSize() / 2;
+        T medianValue = node.getKey(medianIndex);
+        Node<T> newRoot = new Node<>(null);
+        newRoot.addKey(medianValue);
+        node.setParent(newRoot);
+        root = newRoot;
+        node = root;
+        node.addChild(left);
+        node.addChild(right);
+    }
+
+    private Node<T> createRightNode(Node<T> node) {
+        int medianIndex = node.getKeysSize() / 2;
+        int numberOfKeys = node.getKeysSize();
         Node<T> right = new Node<>(null);
         for (int i = medianIndex + 1; i < numberOfKeys; i++) {
             right.addKey(node.getKey(i));
@@ -109,26 +141,22 @@ public class BTree<T extends Comparable<T>> {
                 right.addChild(c);
             }
         }
+        return right;
+    }
 
-        if (node.getParent() == null) {
-            // new root, height of tree is increased
-            Node<T> newRoot = new Node<>(null);
-            newRoot.addKey(medianValue);
-            node.setParent(newRoot);
-            root = newRoot;
-            node = root;
-            node.addChild(left);
-            node.addChild(right);
-        } else {
-            // Move the median value up to the parent
-            Node<T> parent = node.getParent();
-            parent.addKey(medianValue);
-            parent.removeChild(node);
-            parent.addChild(left);
-            parent.addChild(right);
-
-            if (parent.getKeysSize() > maxNumberOfKeys) split(parent);
+    private Node<T> createLeftNode(Node<T> node) {
+        int medianIndex = node.getKeysSize() / 2;
+        Node<T> left = new Node<>(null);
+        for (int i = 0; i < medianIndex; i++) {
+            left.addKey(node.getKey(i));
         }
+        if (node.getChildrenSize() > 0) {
+            for (int j = 0; j <= medianIndex; j++) {
+                Node<T> c = node.getChild(j);
+                left.addChild(c);
+            }
+        }
+        return left;
     }
 
     @Override
