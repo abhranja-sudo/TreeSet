@@ -2,9 +2,12 @@ package com.ar50645;
 
 import com.ar50645.assignment1.model.Node;
 
+/**
+ *
+ * @param <T>
+ */
 public class BTree<T extends Comparable<T>> {
 
-    // Order here determines the minimum and maximum no. of keys any node can hold
     private int order;
     private Node<T> root = null;
     private int minNumberOfKeys;
@@ -12,66 +15,76 @@ public class BTree<T extends Comparable<T>> {
     private int minNumberOfChild;
     private int maxNumberOfChild;
 
-    //Defaults to 2-3 BTree
-    public BTree() {
-        initializeProperties(1);
-    }
 
+    /**
+     * Initializes BTree with given order
+     * @param order denotes maximum number of child a node can have
+     */
     public BTree(int order) {
         this.order = order;
         initializeProperties(order);
     }
 
-    private void initializeProperties(int order){
-        minNumberOfKeys = order;
-        maxNumberOfKeys = minNumberOfKeys * 2;
-        minNumberOfChild = minNumberOfKeys + 1;
-        maxNumberOfChild = maxNumberOfKeys + 1;
+    /**
+     * Default constructor. Initialize Btree with order 2
+     */
+    public BTree() {
+        initializeProperties(2);
     }
 
-    public boolean addKey(T keyToAdd){
+    /**
+     * Helper function called by constructor to initialize BTree
+     * @param order denotes maximum number of child a node can have
+     */
+    private void initializeProperties(int order){
+        maxNumberOfChild = order;
+        maxNumberOfKeys = maxNumberOfChild - 1;
+        minNumberOfKeys = 1;
+        minNumberOfChild = minNumberOfKeys + 1;
+    }
+
+    /**
+     *
+     * @param key to be added to node
+     * @return true if key is successfully added
+     */
+    public boolean addKey(T key){
         if(root == null){
-            initializeRoot(keyToAdd);
+            initializeRoot(key);
             return true;
         }
         Node<T> node = root;
         while (node != null) {
             if(node.getChildrenSize() == 0){
-                node.addKey(keyToAdd);
+                node.addKey(key);
                 if(node.getKeysSize() <= maxNumberOfKeys) {
                     break;
                 }
                 // keys size is greater than maximum Keys allowed, split the node
                 split(node);
             }
-            node = findNextNode(node, keyToAdd);
+            node = navigateNextNode(node, key);
         }
 
         return true;
     }
+    
+    private Node<T> navigateNextNode(Node<T> node, T keyToAdd) {
 
-    private Node<T> findNextNode(Node<T> node, T keyToAdd) {
-        //Navigate
-        //Lessor or equal
-        T lesser = node.getKey(0);
-        if (keyToAdd.compareTo(lesser) <= 0) {
-            return node.getChild(0);
+        //return last child if keyToAdd is greater than the largest key in the node
+        if(keyToAdd.compareTo(node.getKey(node.getKeysSize() - 1)) > 0) {
+            return node.getChild(node.getKeysSize());
         }
 
-        // Greater
-        int numberOfKeys = node.getKeysSize();
-        T greater = node.getKey(numberOfKeys - 1);
-        if(keyToAdd.compareTo(greater) > 0) {
-            return node.getChild(numberOfKeys);
+        //return first child if the keyToAdd is smaller or equal than the smallest key in the node.
+        if (keyToAdd.compareTo(node.getKey(0)) <= 0) {
+            return node.getChild(0);
         }
 
         // Search internal nodes
         for (int i = 1; i < node.getKeysSize(); i++) {
-            T prev = node.getKey(i - 1);
-            T next = node.getKey(i);
-            if (keyToAdd.compareTo(prev) > 0 && keyToAdd.compareTo(next) <= 0) {
-                node = node.getChild(i);
-                break;
+            if (keyToAdd.compareTo(node.getKey(i)) <= 0 && keyToAdd.compareTo(node.getKey(i - 1)) > 0) {
+                return node.getChild(i);
             }
         }
         return node;
@@ -84,16 +97,12 @@ public class BTree<T extends Comparable<T>> {
 
     private void split(Node<T> node) {
 
-        int medianIndex = node.getKeysSize() / 2;
-        T medianValue = node.getKey(medianIndex);
-
         Node<T> left = createLeftNode(node);
         Node<T> right = createRightNode(node);
 
-        // new root, height of tree is increased
+        // new root, height of tree to be increased
         if (node.getParent() == null) {
             createNewRoot(node, left, right);
-
         }
         // Move the median value up to the parent
         else {
@@ -104,12 +113,11 @@ public class BTree<T extends Comparable<T>> {
     private void adjustMedianUpToParent(Node<T> node, Node<T> left, Node<T> right) {
         int medianIndex = node.getKeysSize() / 2;
         T medianValue = node.getKey(medianIndex);
-
         Node<T> parent = node.getParent();
         parent.addKey(medianValue);
         parent.removeChild(node);
-        parent.addChild(left);
-        parent.addChild(right);
+        parent.addChildNode(left);
+        parent.addChildNode(right);
 
         if (parent.getKeysSize() > maxNumberOfKeys){
             split(parent);
@@ -117,43 +125,42 @@ public class BTree<T extends Comparable<T>> {
     }
 
     private void createNewRoot(Node<T> node, Node<T> left, Node<T> right) {
-        int medianIndex = node.getKeysSize() / 2;
-        T medianValue = node.getKey(medianIndex);
         Node<T> newRoot = new Node<>(null);
-        newRoot.addKey(medianValue);
+
+        //Add median key in the new root
+        newRoot.addKey(node.getKey(node.getKeysSize() / 2));
         node.setParent(newRoot);
         root = newRoot;
         node = root;
-        node.addChild(left);
-        node.addChild(right);
+        node.addChildNode(left);
+        node.addChildNode(right);
     }
 
     private Node<T> createRightNode(Node<T> node) {
-        int medianIndex = node.getKeysSize() / 2;
-        int numberOfKeys = node.getKeysSize();
+        int midIndex = node.getKeysSize() / 2;
         Node<T> right = new Node<>(null);
-        for (int i = medianIndex + 1; i < numberOfKeys; i++) {
+        for (int i = midIndex + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
         }
         if (node.getChildrenSize() > 0) {
-            for (int j = medianIndex + 1; j < node.getChildrenSize(); j++) {
+            for (int j = midIndex + 1; j < node.getChildrenSize(); j++) {
                 Node<T> c = node.getChild(j);
-                right.addChild(c);
+                right.addChildNode(c);
             }
         }
         return right;
     }
 
     private Node<T> createLeftNode(Node<T> node) {
-        int medianIndex = node.getKeysSize() / 2;
+        int midIndex = node.getKeysSize() / 2;
         Node<T> left = new Node<>(null);
-        for (int i = 0; i < medianIndex; i++) {
+        for (int i = 0; i < midIndex; i++) {
             left.addKey(node.getKey(i));
         }
         if (node.getChildrenSize() > 0) {
-            for (int j = 0; j <= medianIndex; j++) {
+            for (int j = 0; j <= midIndex; j++) {
                 Node<T> c = node.getChild(j);
-                left.addChild(c);
+                left.addChildNode(c);
             }
         }
         return left;

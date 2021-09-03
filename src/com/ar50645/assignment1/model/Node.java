@@ -32,7 +32,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         return found;
     }
 
-    public boolean addChild(Node<T> child) {
+    public boolean addChildNode(Node<T> child) {
         child.parent = this;
         children.add(child);
         Collections.sort(children);
