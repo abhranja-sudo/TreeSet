@@ -83,64 +83,69 @@ public class BTree<T extends Comparable<T>> {
         if(k >= size){
             throw new IndexOutOfBoundsException("k is out of bound!");
         }
-        return (T)traverse().toArray()[k];
+        return (T)traverse().get(k);
     }
 
-    public void traverseInorderTillK(){
-        traverseHelper(root);
+    public List<T> traverse(){
+        List<T> element = new ArrayList<>();
+//        T[] element = (T[]) new Comparable[size];
+        traverseHelper(root, (ArrayList<T>) element);
+        return element;
     }
-    private void traverseHelper(Node<T> node){
+    private void traverseHelper(Node<T> node, ArrayList<T> array){
         if(node.getChildrenSize() == 0){
-            System.out.println(node.getKeys().stream().map(Object::toString)
-                    .collect(Collectors.joining("/n ")));
+            node.getKeys().stream().collect(Collectors.toCollection(() -> array));
+//            System.out.println(node.getKeys().stream().map(Object::toString)
+//                    .collect(Collectors.joining("/n ")));
 //            System.out.println(node.getKeys());
             return;
         }
         for(int i = 0;i <= node.getKeysSize(); i++){
-            traverseHelper(node.getChild(i));
+            traverseHelper(node.getChild(i), array);
             if(i != node.getKeysSize()){
-                System.out.println(node.getKey(i));
+                array.add(node.getKey(i));
+//                System.out.println(node.getKey(i));
             }
 //            traverseHelper(node.getChild(i + 1));
         }
 //        System.out.println(node.getKeys());
     }
 
-    public Set<T> traverse(){
-        T lastValue;
-        Node<T> lastNode = null;
-        int index = 0;
-        Deque<Node<T>> toVisit = new ArrayDeque<>();
-        if (root!=null && root.getKeysSize() > 0) {
-            toVisit.add(root);
-        }
-        Set<T> set = new TreeSet<>();
-
-        while(((lastNode!=null && index<lastNode.getKeysSize())||(toVisit.size()>0))){
-            if (lastNode!=null && (index < lastNode.getKeysSize())) {
-                lastValue = lastNode.getKey(index++);
-                set.add(lastValue);
-                continue;
-            }
-            while (toVisit.size()>0) {
-                // Go thru the current nodes
-                Node<T> n = toVisit.pop();
-
-                // Add non-null children
-                for (int i=0; i<n.getChildrenSize(); i++) {
-                    toVisit.add(n.getChild(i));
-                }
-
-                // Update last node (used in remove method)
-                index = 0;
-                lastNode = n;
-                lastValue = lastNode.getKey(index++);
-                set.add(lastValue);
-                break;
-            }
-        }
-        return set;
-    }
+//    public Set<T> traverse(){
+//        T lastValue;
+//        Node<T> lastNode = null;
+//        int index = 0;
+//        Deque<Node<T>> toVisit = new ArrayDeque<>();
+//        if (root!=null && root.getKeysSize() > 0) {
+//            toVisit.add(root);
+//        }
+//        Set<T> set = new TreeSet<>();
+//
+//        while(((lastNode!=null && index<lastNode.getKeysSize())||(toVisit.size()>0))){
+//            if (lastNode!=null && (index < lastNode.getKeysSize())) {
+//                lastValue = lastNode.getKey(index++);
+//                set.add(lastValue);
+//                continue;
+//            }
+//            while (toVisit.size()>0) {
+//                // Go thru the current nodes
+//                Node<T> n = toVisit.pop();
+//
+//                // Add non-null children
+//                for (int i=0; i<n.getChildrenSize(); i++) {
+//                    toVisit.add(n.getChild(i));
+//                }
+//
+//                // Update last node (used in remove method)
+//                index = 0;
+//                lastNode = n;
+//                lastValue = lastNode.getKey(index++);
+//                set.add(lastValue);
+//                break;
+//            }
+//        }
+//        return set;
+//    }
 
 
     private Node<T> navigateNextNode(Node<T> node, T keyToAdd) {
