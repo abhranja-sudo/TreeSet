@@ -1,8 +1,6 @@
 package com.ar50645;
 
 import com.ar50645.assignment1.model.Node;
-import com.sun.xml.internal.fastinfoset.tools.StAX2SAXReader;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -88,65 +86,24 @@ public class BTree<T extends Comparable<T>> {
 
     public List<T> traverse(){
         List<T> element = new ArrayList<>();
-//        T[] element = (T[]) new Comparable[size];
         traverseHelper(root, (ArrayList<T>) element);
         return element;
     }
     private void traverseHelper(Node<T> node, ArrayList<T> array){
         if(node.getChildrenSize() == 0){
-            node.getKeys().stream().collect(Collectors.toCollection(() -> array));
-//            System.out.println(node.getKeys().stream().map(Object::toString)
-//                    .collect(Collectors.joining("/n ")));
-//            System.out.println(node.getKeys());
+            node.getKeys()
+                    .stream()
+                    .collect(Collectors
+                            .toCollection(() -> array));
             return;
         }
         for(int i = 0;i <= node.getKeysSize(); i++){
             traverseHelper(node.getChild(i), array);
             if(i != node.getKeysSize()){
                 array.add(node.getKey(i));
-//                System.out.println(node.getKey(i));
             }
-//            traverseHelper(node.getChild(i + 1));
         }
-//        System.out.println(node.getKeys());
     }
-
-//    public Set<T> traverse(){
-//        T lastValue;
-//        Node<T> lastNode = null;
-//        int index = 0;
-//        Deque<Node<T>> toVisit = new ArrayDeque<>();
-//        if (root!=null && root.getKeysSize() > 0) {
-//            toVisit.add(root);
-//        }
-//        Set<T> set = new TreeSet<>();
-//
-//        while(((lastNode!=null && index<lastNode.getKeysSize())||(toVisit.size()>0))){
-//            if (lastNode!=null && (index < lastNode.getKeysSize())) {
-//                lastValue = lastNode.getKey(index++);
-//                set.add(lastValue);
-//                continue;
-//            }
-//            while (toVisit.size()>0) {
-//                // Go thru the current nodes
-//                Node<T> n = toVisit.pop();
-//
-//                // Add non-null children
-//                for (int i=0; i<n.getChildrenSize(); i++) {
-//                    toVisit.add(n.getChild(i));
-//                }
-//
-//                // Update last node (used in remove method)
-//                index = 0;
-//                lastNode = n;
-//                lastValue = lastNode.getKey(index++);
-//                set.add(lastValue);
-//                break;
-//            }
-//        }
-//        return set;
-//    }
-
 
     private Node<T> navigateNextNode(Node<T> node, T keyToAdd) {
 
