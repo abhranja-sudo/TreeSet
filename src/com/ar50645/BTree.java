@@ -1,6 +1,10 @@
 package com.ar50645;
 
 import com.ar50645.assignment1.model.Node;
+import com.sun.xml.internal.fastinfoset.tools.StAX2SAXReader;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -14,7 +18,7 @@ public class BTree<T extends Comparable<T>> {
     private int maxNumberOfKeys;
     private int minNumberOfChild;
     private int maxNumberOfChild;
-
+    private int size;
 
     /**
      * Initializes BTree with given order
@@ -45,30 +49,100 @@ public class BTree<T extends Comparable<T>> {
 
     /**
      *
-     * @param key to be added to node
-     * @return true if key is successfully added
+     * @param element to be added to node
+     * @return true if element is successfully added
      */
-    public boolean addKey(T key){
+    public boolean addElement(T element){
         if(root == null){
-            initializeRoot(key);
+            initializeRoot(element);
+            size++;
             return true;
         }
         Node<T> node = root;
         while (node != null) {
             if(node.getChildrenSize() == 0){
-                node.addKey(key);
+                node.addKey(element);
                 if(node.getKeysSize() <= maxNumberOfKeys) {
                     break;
                 }
                 // keys size is greater than maximum Keys allowed, split the node
                 split(node);
             }
-            node = navigateNextNode(node, key);
+            node = navigateNextNode(node, element);
         }
-
+        size++;
         return true;
     }
-    
+
+    /**
+     *
+     * @param k denotes the
+     * @return element
+     */
+    public T getElement(int k){
+        if(k >= size){
+            throw new IndexOutOfBoundsException("k is out of bound!");
+        }
+        return (T)traverse().toArray()[k];
+    }
+
+    public void traverseInorderTillK(){
+        traverseHelper(root);
+    }
+    private void traverseHelper(Node<T> node){
+        if(node.getChildrenSize() == 0){
+            System.out.println(node.getKeys().stream().map(Object::toString)
+                    .collect(Collectors.joining("/n ")));
+//            System.out.println(node.getKeys());
+            return;
+        }
+        for(int i = 0;i <= node.getKeysSize(); i++){
+            traverseHelper(node.getChild(i));
+            if(i != node.getKeysSize()){
+                System.out.println(node.getKey(i));
+            }
+//            traverseHelper(node.getChild(i + 1));
+        }
+//        System.out.println(node.getKeys());
+    }
+
+    public Set<T> traverse(){
+        T lastValue;
+        Node<T> lastNode = null;
+        int index = 0;
+        Deque<Node<T>> toVisit = new ArrayDeque<>();
+        if (root!=null && root.getKeysSize() > 0) {
+            toVisit.add(root);
+        }
+        Set<T> set = new TreeSet<>();
+
+        while(((lastNode!=null && index<lastNode.getKeysSize())||(toVisit.size()>0))){
+            if (lastNode!=null && (index < lastNode.getKeysSize())) {
+                lastValue = lastNode.getKey(index++);
+                set.add(lastValue);
+                continue;
+            }
+            while (toVisit.size()>0) {
+                // Go thru the current nodes
+                Node<T> n = toVisit.pop();
+
+                // Add non-null children
+                for (int i=0; i<n.getChildrenSize(); i++) {
+                    toVisit.add(n.getChild(i));
+                }
+
+                // Update last node (used in remove method)
+                index = 0;
+                lastNode = n;
+                lastValue = lastNode.getKey(index++);
+                set.add(lastValue);
+                break;
+            }
+        }
+        return set;
+    }
+
+
     private Node<T> navigateNextNode(Node<T> node, T keyToAdd) {
 
         //return last child if keyToAdd is greater than the largest key in the node
