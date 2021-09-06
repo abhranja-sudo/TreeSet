@@ -38,7 +38,7 @@ public class Assignment1 {
 
         //Given a k,your code returns the kth element in the B-tree in lexicographical order. If k is out-of-bounds throw an exception.
         bTree.getElement(5);
-//        bTree.getElement(9);
+        bTree.getElement(9); // gives out of bounds exception
 
         System.out.println("Print out the RedIds of the students that are on probation(GPA less than 2.85) that in the\n" +
                 "list from the front to the back of the list.");
