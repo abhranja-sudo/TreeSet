@@ -5,8 +5,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ *  A B-tree is a tree data structure that keeps data sorted and allows searches, insertions, and deletions in
+ *  logarithmic amortized time. Unlike self-balancing binary search trees, it is optimized for systems that read and
+ *  write large blocks of data. It is most commonly used in database and file systems.
  *
- * @param <T>
+ *  @see <a href = https://www.cpp.edu/~ftang/courses/CS241/notes/b-tree.htm</a>
+ *  @author Abhishek Ranjan <aranjan5694@sdsu.edu>
  */
 public class BTree<T extends Comparable<T>> {
 
@@ -20,7 +24,7 @@ public class BTree<T extends Comparable<T>> {
 
     /**
      * Initializes BTree with given order
-     * @param order denotes maximum number of child a node can have
+     * @param order denotes maximum number of child node can have
      */
     public BTree(int order) {
         this.order = order;
@@ -47,7 +51,52 @@ public class BTree<T extends Comparable<T>> {
 
     /**
      *
-     * @param element to be added to node
+     * @param k Index of the element
+     *          0-Indexed
+     * @return kth element in B-Tree
+     */
+    public T getElement(int k){
+        if(k >= size){
+            throw new IndexOutOfBoundsException("k is out of bound!");
+        }
+        return (T)traverse().get(k);
+    }
+
+    /**
+     * Traverse the tree In-Order
+     * @return List containing lexicographically sorted element
+     */
+    public List<T> traverse(){
+        List<T> element = new ArrayList<>();
+        traverseHelper(root, (ArrayList<T>) element);
+        return element;
+    }
+
+    /**
+     * Helper function called by traverse. Recursively traverse the tree In-Order
+     * @param node the node where traversal starts
+     * @param list accumulates lexicographically sorted element
+     */
+    private void traverseHelper(Node<T> node, ArrayList<T> list){
+        if(node.getChildrenSize() == 0){
+            node.getKeys()
+                .stream()
+                .collect(Collectors
+                        .toCollection(() -> list));
+            return;
+        }
+
+        for(int i = 0;i <= node.getKeysSize(); i++){
+            traverseHelper(node.getChild(i), list);
+            if(i != node.getKeysSize()){
+                list.add(node.getKey(i));
+            }
+        }
+    }
+
+    /**
+     * Add element to the Btree
+     * @param element Element to be added to the tree
      * @return true if element is successfully added
      */
     public boolean addElement(T element){
@@ -56,6 +105,7 @@ public class BTree<T extends Comparable<T>> {
             size++;
             return true;
         }
+
         Node<T> node = root;
         while (node != null) {
             if(node.getChildrenSize() == 0){
@@ -63,7 +113,6 @@ public class BTree<T extends Comparable<T>> {
                 if(node.getKeysSize() <= maxNumberOfKeys) {
                     break;
                 }
-                // keys size is greater than maximum Keys allowed, split the node
                 split(node);
             }
             node = navigateNextNode(node, element);
@@ -73,51 +122,21 @@ public class BTree<T extends Comparable<T>> {
     }
 
     /**
-     *
-     * @param k denotes the
-     * @return element
+     * Search for next candidate node down the root for element to add
+     * @param node
+     * @param keyToAdd
+     * @return candidate Node
      */
-    public T getElement(int k){
-        if(k >= size){
-            throw new IndexOutOfBoundsException("k is out of bound!");
-        }
-        return (T)traverse().get(k);
-    }
-
-    public List<T> traverse(){
-        List<T> element = new ArrayList<>();
-        traverseHelper(root, (ArrayList<T>) element);
-        return element;
-    }
-    private void traverseHelper(Node<T> node, ArrayList<T> array){
-        if(node.getChildrenSize() == 0){
-            node.getKeys()
-                    .stream()
-                    .collect(Collectors
-                            .toCollection(() -> array));
-            return;
-        }
-        for(int i = 0;i <= node.getKeysSize(); i++){
-            traverseHelper(node.getChild(i), array);
-            if(i != node.getKeysSize()){
-                array.add(node.getKey(i));
-            }
-        }
-    }
-
     private Node<T> navigateNextNode(Node<T> node, T keyToAdd) {
 
-        //return last child if keyToAdd is greater than the largest key in the node
         if(keyToAdd.compareTo(node.getKey(node.getKeysSize() - 1)) > 0) {
             return node.getChild(node.getKeysSize());
         }
 
-        //return first child if the keyToAdd is smaller or equal than the smallest key in the node.
         if (keyToAdd.compareTo(node.getKey(0)) <= 0) {
             return node.getChild(0);
         }
 
-        // Search internal nodes
         for (int i = 1; i < node.getKeysSize(); i++) {
             if (keyToAdd.compareTo(node.getKey(i)) <= 0 && keyToAdd.compareTo(node.getKey(i - 1)) > 0) {
                 return node.getChild(i);
@@ -126,31 +145,41 @@ public class BTree<T extends Comparable<T>> {
         return node;
     }
 
+    /**
+     * Create root the first time add key called
+     * @param key
+     */
     private void initializeRoot(T key){
         root = new Node<>(null);
         root.addKey(key);
     }
 
+    /**
+     * splits the node. called when keys size is greater than maximum keys allowed
+     * @param node Node to split
+     */
     private void split(Node<T> node) {
 
         Node<T> left = createLeftNode(node);
         Node<T> right = createRightNode(node);
 
-        // new root, height of tree to be increased
         if (node.getParent() == null) {
             createNewRoot(node, left, right);
         }
-        // Move the median value up to the parent
         else {
             adjustMedianUpToParent(node, left, right);
         }
     }
 
+    /**
+     * Move the median value up to the parent
+     * @param node
+     * @param left
+     * @param right
+     */
     private void adjustMedianUpToParent(Node<T> node, Node<T> left, Node<T> right) {
-        int medianIndex = node.getKeysSize() / 2;
-        T medianValue = node.getKey(medianIndex);
         Node<T> parent = node.getParent();
-        parent.addKey(medianValue);
+        parent.addKey(node.getKey(node.getKeysSize() / 2));
         parent.removeChild(node);
         parent.addChildNode(left);
         parent.addChildNode(right);
@@ -160,10 +189,15 @@ public class BTree<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * create new root, height of tree to be increased.
+     * Add median key in the new root.
+     * @param node Node to be split
+     * @param left add left node to the child of node
+     * @param right
+     */
     private void createNewRoot(Node<T> node, Node<T> left, Node<T> right) {
         Node<T> newRoot = new Node<>(null);
-
-        //Add median key in the new root
         newRoot.addKey(node.getKey(node.getKeysSize() / 2));
         node.setParent(newRoot);
         root = newRoot;
@@ -172,31 +206,39 @@ public class BTree<T extends Comparable<T>> {
         node.addChildNode(right);
     }
 
+    /**
+     * Create right node, add key to the new right node from splitting node from mid to end and
+     * make all the right children of splitting node, if any, the children of new right node
+     * @param node Node that is splitting up
+     * @return right node
+     */
     private Node<T> createRightNode(Node<T> node) {
-        int midIndex = node.getKeysSize() / 2;
         Node<T> right = new Node<>(null);
-        for (int i = midIndex + 1; i < node.getKeysSize(); i++) {
+        for (int i = node.getKeysSize() / 2 + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
         }
         if (node.getChildrenSize() > 0) {
-            for (int j = midIndex + 1; j < node.getChildrenSize(); j++) {
-                Node<T> c = node.getChild(j);
-                right.addChildNode(c);
+            for (int i = node.getKeysSize() / 2 + 1; i < node.getChildrenSize(); i++) {
+                right.addChildNode(node.getChild(i));
             }
         }
         return right;
     }
 
+    /**
+     * Create left node, add key to the new left node from splitting node upto mid and
+     * make all the left children of splitting node, if any, the children of the new left node
+     * @param node  Node that is splitting up
+     * @return left node
+     */
     private Node<T> createLeftNode(Node<T> node) {
-        int midIndex = node.getKeysSize() / 2;
         Node<T> left = new Node<>(null);
-        for (int i = 0; i < midIndex; i++) {
+        for (int i = 0; i < node.getKeysSize() / 2; i++) {
             left.addKey(node.getKey(i));
         }
         if (node.getChildrenSize() > 0) {
-            for (int j = 0; j <= midIndex; j++) {
-                Node<T> c = node.getChild(j);
-                left.addChildNode(c);
+            for (int i = 0; i <= node.getKeysSize() / 2; i++) {
+                left.addChildNode(node.getChild(i));
             }
         }
         return left;

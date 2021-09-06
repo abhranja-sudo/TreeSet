@@ -14,24 +14,41 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         this.parent = parent;
     }
 
+    /**
+     * Remove child node
+     * @param child Node to removed
+     * @return true if successfully removed
+     */
     public boolean removeChild(Node<T> child) {
-        boolean found = false;
-        if (this.getChildrenSize() == 0)
-            return found;
+        if (this.getChildrenSize() == 0){
+            return false;
+        }
         for (int i = 0; i < this.getChildrenSize(); i++) {
             if (children.get(i).equals(child)) {
-                found = true;
-            } else if (found) {
-                // shift the rest of the keys down
-                children.set(i - 1, children.get(i));
+                shiftLeft(i + 1, children);
+                children.remove(children.size() - 1);
+                return true;
             }
         }
-        if (found) {
-            children.remove(children.size() - 1);
-        }
-        return found;
+        return false;
     }
 
+    /**
+     *  Function to shift node left starting with index
+     * @param index from where shifting is to be done
+     */
+    public void shiftLeft(int index, List<Node<T>> list) {
+        while( index < list.size()){
+            list.set( index - 1, list.get(index));
+            index++;
+        }
+    }
+
+    /**
+     * Add the child to the node
+     * @param child Node to be added as child
+     * @return true if child is successfully added
+     */
     public boolean addChildNode(Node<T> child) {
         child.parent = this;
         children.add(child);
@@ -39,6 +56,11 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         return true;
     }
 
+    /**
+     * get the child at any particular index
+     * @param index
+     * @return Node at a particular index
+     */
     public Node<T> getChild(int index) {
         if (index >= children.size()){
             return null;
