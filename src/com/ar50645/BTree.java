@@ -51,8 +51,7 @@ public class BTree<T extends Comparable<T>> {
     }
 
     /**
-     *
-     * @param k Index of the element
+     * @param k Index of the element to get
      *          0-Indexed
      * @return kth element in B-Tree
      */
@@ -122,7 +121,7 @@ public class BTree<T extends Comparable<T>> {
     }
 
     /**
-     * Helper function called by Search for next candidate node down the root for element to add
+     * Helper function called by addElement for next candidate node down the root for element to add
      * @param node Node to compare key with
      * @param keyToAdd key to be added in tree
      * @return candidate Node where key can be inserted
@@ -172,7 +171,7 @@ public class BTree<T extends Comparable<T>> {
     }
 
     /**
-     * Move the median value up to the parent
+     * Helper function. Called by split() to move the median value up to the parent
      */
     private void adjustMedianUpToParent(Node<T> node, Node<T> left, Node<T> right) {
         Node<T> parent = node.getParent();
