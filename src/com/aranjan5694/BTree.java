@@ -1,6 +1,6 @@
-package com.ar50645;
+package com.aranjan5694;
 
-import com.ar50645.assignment1.model.Node;
+import com.aranjan5694.assignment1.model.Node;
 
 import java.util.ArrayList;
 import java.util.List;

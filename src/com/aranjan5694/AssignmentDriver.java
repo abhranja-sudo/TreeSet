@@ -1,6 +1,6 @@
-package com.ar50645;
+package com.aranjan5694;
 
-import com.ar50645.assignment1.model.Student;
+import com.aranjan5694.assignment1.model.Student;
 
 import java.util.LinkedList;
 import java.util.stream.Stream;
