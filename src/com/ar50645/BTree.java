@@ -243,43 +243,4 @@ public class BTree<T extends Comparable<T>> {
         }
         return left;
     }
-
-    @Override
-    public String toString() {
-        return TreePrinter.getString(this);
-    }
-
-    private static class TreePrinter {
-
-        public static <T extends Comparable<T>> String getString(BTree<T> tree) {
-            if (tree.root == null) return "Tree has no nodes.";
-            return getString(tree.root, "", true);
-        }
-
-        private static <T extends Comparable<T>> String getString(Node<T> node, String prefix, boolean isTail) {
-            StringBuilder builder = new StringBuilder();
-
-            builder.append(prefix).append((isTail ? "└── " : "├── "));
-            for (int i = 0; i < node.getKeysSize(); i++) {
-                T value = node.getKey(i);
-                builder.append(value);
-                if (i < node.getKeysSize() - 1)
-                    builder.append(", ");
-            }
-            builder.append("\n");
-
-            if (node.getChildren() != null) {
-                for (int i = 0; i < node.getChildrenSize() - 1; i++) {
-                    Node<T> obj = node.getChild(i);
-                    builder.append(getString(obj, prefix + (isTail ? "    " : "│   "), false));
-                }
-                if (node.getChildrenSize() >= 1) {
-                    Node<T> obj = node.getChild(node.getChildrenSize() - 1);
-                    builder.append(getString(obj, prefix + (isTail ? "    " : "│   "), true));
-                }
-            }
-
-            return builder.toString();
-        }
-    }
 }

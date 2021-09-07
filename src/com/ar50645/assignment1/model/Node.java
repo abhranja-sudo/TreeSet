@@ -113,37 +113,4 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         return this.keys.get(0).compareTo(o.getKey(0));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("keys=[");
-        for (int i = 0; i < getKeysSize(); i++) {
-            T value = getKey(i);
-            builder.append(value);
-            if (i < getKeysSize() - 1)
-                builder.append(", ");
-        }
-        builder.append("]\n");
-
-        if (parent != null) {
-            builder.append("parent=[");
-            for (int i = 0; i < parent.getKeysSize(); i++) {
-                T value = parent.getKey(i);
-                builder.append(value);
-                if (i < parent.getKeysSize() - 1)
-                    builder.append(", ");
-            }
-            builder.append("]\n");
-        }
-
-        if (children != null) {
-            builder.append("keySize=").append(getKeysSize()).append(" children=").append(getChildrenSize()).append("\n");
-        }
-
-        return builder.toString();
-    }
 }
