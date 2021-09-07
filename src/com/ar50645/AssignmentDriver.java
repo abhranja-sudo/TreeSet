@@ -34,11 +34,16 @@ public class AssignmentDriver {
         bTree.addElement(saurav);
         bTree.addElement(saurabh);
 
-        System.out.println(bTree);
-
-        //Given a k,your code returns the kth element in the B-tree in lexicographical order. If k is out-of-bounds throw an exception.
+        //Given a k,your code returns the kth element in the B-tree in lexicographical order.
+        // If k is out-of-bounds throw an exception.
         bTree.getElement(5);
-        bTree.getElement(9); // gives out of bounds exception
+
+        // Out of bounds exception
+        try{
+            bTree.getElement(9);
+        }catch (IndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
 
         System.out.println("Print out the RedIds of the students that are on probation(GPA less than 2.85) that in the\n" +
                 "list from the front to the back of the list.");
