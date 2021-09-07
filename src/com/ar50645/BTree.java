@@ -154,7 +154,7 @@ public class BTree<T extends Comparable<T>> {
     }
 
     /**
-     * splits the node. called when keys size is greater than maximum keys allowed
+     * splits the node. called when keys size is greater than maximum keys allowed in node
      * @param node Node to split
      */
     private void split(Node<T> node) {

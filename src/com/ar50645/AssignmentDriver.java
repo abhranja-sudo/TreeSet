@@ -5,6 +5,9 @@ import com.ar50645.assignment1.model.Student;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
+/**
+ * Driver class to test assignment
+ */
 public class AssignmentDriver {
 
     public static void main(String[] args) {
