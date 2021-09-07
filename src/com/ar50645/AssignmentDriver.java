@@ -5,7 +5,7 @@ import com.ar50645.assignment1.model.Student;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-public class Assignment1 {
+public class AssignmentDriver {
 
     public static void main(String[] args) {
 
