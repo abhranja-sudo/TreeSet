@@ -2,6 +2,10 @@ package com.ar50645.assignment1.model;
 
 import java.util.*;
 
+/**
+ * Node class to be used in the B-Tree
+ * @author Abhishek Ranjan <aranjan5694@sdsu.edu>
+ */
 public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 
     private List<T> keys;
@@ -58,7 +62,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 
     /**
      * get the child at any particular index
-     * @param index
+     * @param index Index of the child need to get
      * @return Node at a particular index
      */
     public Node<T> getChild(int index) {

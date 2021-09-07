@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
  *  logarithmic amortized time. Unlike self-balancing binary search trees, it is optimized for systems that read and
  *  write large blocks of data. It is most commonly used in database and file systems.
  *
- *  @see <a href = https://www.cpp.edu/~ftang/courses/CS241/notes/b-tree.htm</a>
  *  @author Abhishek Ranjan <aranjan5694@sdsu.edu>
  */
 public class BTree<T extends Comparable<T>> {
@@ -59,7 +58,7 @@ public class BTree<T extends Comparable<T>> {
         if(k >= size){
             throw new IndexOutOfBoundsException("k is out of bound!");
         }
-        return (T)traverse().get(k);
+        return traverse().get(k);
     }
 
     /**
@@ -67,8 +66,8 @@ public class BTree<T extends Comparable<T>> {
      * @return List containing lexicographically sorted element
      */
     public List<T> traverse(){
-        List<T> element = new ArrayList<>();
-        traverseHelper(root, (ArrayList<T>) element);
+        ArrayList<T> element = new ArrayList<>();
+        traverseHelper(root, element);
         return element;
     }
 
@@ -81,8 +80,7 @@ public class BTree<T extends Comparable<T>> {
         if(node.getChildrenSize() == 0){
             node.getKeys()
                 .stream()
-                .collect(Collectors
-                        .toCollection(() -> list));
+                .collect(Collectors.toCollection(() -> list));
             return;
         }
 
@@ -122,10 +120,10 @@ public class BTree<T extends Comparable<T>> {
     }
 
     /**
-     * Search for next candidate node down the root for element to add
-     * @param node
-     * @param keyToAdd
-     * @return candidate Node
+     * Helper function called by Search for next candidate node down the root for element to add
+     * @param node Node to compare key with
+     * @param keyToAdd key to be added in tree
+     * @return candidate Node where key can be inserted
      */
     private Node<T> navigateNextNode(Node<T> node, T keyToAdd) {
 
@@ -147,7 +145,7 @@ public class BTree<T extends Comparable<T>> {
 
     /**
      * Create root the first time add key called
-     * @param key
+     * @param key Key to be added to newly created root
      */
     private void initializeRoot(T key){
         root = new Node<>(null);
@@ -173,9 +171,6 @@ public class BTree<T extends Comparable<T>> {
 
     /**
      * Move the median value up to the parent
-     * @param node
-     * @param left
-     * @param right
      */
     private void adjustMedianUpToParent(Node<T> node, Node<T> left, Node<T> right) {
         Node<T> parent = node.getParent();
@@ -194,7 +189,7 @@ public class BTree<T extends Comparable<T>> {
      * Add median key in the new root.
      * @param node Node to be split
      * @param left add left node to the child of node
-     * @param right
+     * @param right right node to be added as child of node
      */
     private void createNewRoot(Node<T> node, Node<T> left, Node<T> right) {
         Node<T> newRoot = new Node<>(null);

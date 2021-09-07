@@ -1,5 +1,10 @@
 package com.ar50645.assignment1.model;
 
+/**
+ * A Student here has a name, redid and a GPA.
+ *
+ * @author Abhishek Ranjan <aranjan5694@sdsu.edu>
+ */
 public class Student implements Comparable<Student> {
     private Integer redId;
     private String name;
