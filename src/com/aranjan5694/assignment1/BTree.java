@@ -1,4 +1,4 @@
-package com.aranjan5694;
+package com.aranjan5694.assignment1;
 
 import com.aranjan5694.assignment1.model.Node;
 
