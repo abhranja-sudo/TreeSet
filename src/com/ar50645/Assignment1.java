@@ -49,10 +49,6 @@ public class Assignment1 {
                 "the list");
 
         printStudentWithGpaInReverseOrder(4.0, bTree);
-
-        System.out.println(bTree.traverse());
-        System.out.println(bTree.traverse().size());
-//        System.out.println(bTree.getElement(17));
     }
 
     public static void printStudentOnProbation(BTree<Student> bTree){
