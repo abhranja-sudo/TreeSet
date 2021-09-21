@@ -27,16 +27,16 @@ public class AssignmentDriver {
         Student saurabh = new Student(117,"Saurabh",3.43);
 
         // Add element in BTree
-        bTree.addElement(abhishek);
-        bTree.addElement(sanatan);
-        bTree.addElement(anuj);
-        bTree.addElement(kshitij);
-        bTree.addElement(hari);
-        bTree.addElement(aashit);
-        bTree.addElement(sanatan);
-        bTree.addElement(gaurav);
-        bTree.addElement(saurav);
-        bTree.addElement(saurabh);
+        bTree.add(abhishek);
+        bTree.add(sanatan);
+        bTree.add(anuj);
+        bTree.add(kshitij);
+        bTree.add(hari);
+        bTree.add(aashit);
+        bTree.add(sanatan);
+        bTree.add(gaurav);
+        bTree.add(saurav);
+        bTree.add(saurabh);
 
         //Given a k,your code returns the kth element in the B-tree in lexicographical order.
         // If k is out-of-bounds throw an exception.

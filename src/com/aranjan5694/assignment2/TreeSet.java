@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
  *
  *  @author Abhishek Ranjan <aranjan5694@sdsu.edu>
  */
-public class TreeSet<T extends Comparable<T>> {
+public class TreeSet<E extends Comparable<E>> {
 
     private int order;
-    private Node<T> root = null;
+    private Node<E> root = null;
     private int minNumberOfKeys;
     private int maxNumberOfKeys;
     private int minNumberOfChild;
@@ -54,7 +54,7 @@ public class TreeSet<T extends Comparable<T>> {
      *          0-Indexed
      * @return kth element in B-Tree
      */
-    public T getElement(int k){
+    public E getElement(int k){
         if(k >= size){
             throw new IndexOutOfBoundsException("k is out of bound!");
         }
@@ -65,8 +65,8 @@ public class TreeSet<T extends Comparable<T>> {
      * Traverse the tree In-Order
      * @return List containing lexicographically sorted element
      */
-    public List<T> traverse(){
-        ArrayList<T> element = new ArrayList<>();
+    public List<E> traverse(){
+        ArrayList<E> element = new ArrayList<>();
         traverseHelper(root, element);
         return element;
     }
@@ -76,7 +76,7 @@ public class TreeSet<T extends Comparable<T>> {
      * @param node the node where traversal starts
      * @param list accumulates lexicographically sorted element
      */
-    private void traverseHelper(Node<T> node, ArrayList<T> list){
+    private void traverseHelper(Node<E> node, ArrayList<E> list){
         if(node.getChildrenSize() == 0){
             node.getKeys()
                 .stream()
@@ -93,32 +93,38 @@ public class TreeSet<T extends Comparable<T>> {
     }
 
     /**
-     * Add element to the Btree
-     * @param element Element to be added to the tree
-     * @return true if element is successfully added
+     * * Adds the specified element to this set if it is not already present.
+     *      * More formally, adds the specified element {@code e} to this set if
+     *      * the set contains no element {@code e2} such that
+     *      * <tt>(e==null&nbsp;?&nbsp;e2==null&nbsp;:&nbsp;e.equals(e2))</tt>.
+     *      * If this set already contains the element, the call leaves the set
+     *      * unchanged and returns {@code false}.
+     *      *
+     *      * @param e element to be added to this set
+     *      * @return {@code true} if this set did not already contain the specified
      */
-    public boolean addElement(T element){
+    public boolean add(E e){
         if(root == null){
-            initializeRoot(element);
+            initializeRoot(e);
             size++;
             return true;
         }
 
-        Node<T> node = root;
+        Node<E> node = root;
         while (node != null) {
             if(node.getChildrenSize() == 0){
                 //check for duplicates
-                long count = node.getKeys().stream().filter(s -> s.compareTo(element) == 0).count();
+                long count = node.getKeys().stream().filter(s -> s.compareTo(e) == 0).count();
                 if(count >= 1){
                     return false;  // duplicate items
                 }
-                node.addKey(element);
+                node.addKey(e);
                 if(node.getKeysSize() <= maxNumberOfKeys) {
                     break;
                 }
                 split(node);
             }
-            node = navigateNextNode(node, element);
+            node = navigateNextNode(node, e);
         }
         size++;
         return true;
@@ -130,7 +136,7 @@ public class TreeSet<T extends Comparable<T>> {
      * @param keyToAdd key to be added in tree
      * @return candidate Node where key can be inserted
      */
-    private Node<T> navigateNextNode(Node<T> node, T keyToAdd) {
+    private Node<E> navigateNextNode(Node<E> node, E keyToAdd) {
 
         if(keyToAdd.compareTo(node.getKey(node.getKeysSize() - 1)) > 0) {
             return node.getChild(node.getKeysSize());
@@ -152,7 +158,7 @@ public class TreeSet<T extends Comparable<T>> {
      * Create root the first time add key called
      * @param key Key to be added to newly created root
      */
-    private void initializeRoot(T key){
+    private void initializeRoot(E key){
         root = new Node<>(null);
         root.addKey(key);
     }
@@ -161,10 +167,10 @@ public class TreeSet<T extends Comparable<T>> {
      * splits the node. called when keys size is greater than maximum keys allowed in node
      * @param node Node to split
      */
-    private void split(Node<T> node) {
+    private void split(Node<E> node) {
 
-        Node<T> left = createLeftNode(node);
-        Node<T> right = createRightNode(node);
+        Node<E> left = createLeftNode(node);
+        Node<E> right = createRightNode(node);
 
         if (node.getParent() == null) {
             createNewRoot(node, left, right);
@@ -177,8 +183,8 @@ public class TreeSet<T extends Comparable<T>> {
     /**
      * Helper function. Called by split() to move the median value up to the parent
      */
-    private void adjustMedianUpToParent(Node<T> node, Node<T> left, Node<T> right) {
-        Node<T> parent = node.getParent();
+    private void adjustMedianUpToParent(Node<E> node, Node<E> left, Node<E> right) {
+        Node<E> parent = node.getParent();
         parent.addKey(node.getKey(node.getKeysSize() / 2));
         parent.removeChild(node);
         parent.addChildNode(left);
@@ -196,8 +202,8 @@ public class TreeSet<T extends Comparable<T>> {
      * @param left add left node to the child of node
      * @param right right node to be added as child of node
      */
-    private void createNewRoot(Node<T> node, Node<T> left, Node<T> right) {
-        Node<T> newRoot = new Node<>(null);
+    private void createNewRoot(Node<E> node, Node<E> left, Node<E> right) {
+        Node<E> newRoot = new Node<>(null);
         newRoot.addKey(node.getKey(node.getKeysSize() / 2));
         node.setParent(newRoot);
         root = newRoot;
@@ -212,8 +218,8 @@ public class TreeSet<T extends Comparable<T>> {
      * @param node Node that is splitting up
      * @return right node
      */
-    private Node<T> createRightNode(Node<T> node) {
-        Node<T> right = new Node<>(null);
+    private Node<E> createRightNode(Node<E> node) {
+        Node<E> right = new Node<>(null);
         for (int i = node.getKeysSize() / 2 + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
         }
@@ -231,8 +237,8 @@ public class TreeSet<T extends Comparable<T>> {
      * @param node  Node that is splitting up
      * @return left node
      */
-    private Node<T> createLeftNode(Node<T> node) {
-        Node<T> left = new Node<>(null);
+    private Node<E> createLeftNode(Node<E> node) {
+        Node<E> left = new Node<>(null);
         for (int i = 0; i < node.getKeysSize() / 2; i++) {
             left.addKey(node.getKey(i));
         }
