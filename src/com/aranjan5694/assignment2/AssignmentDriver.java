@@ -1,6 +1,6 @@
-package com.aranjan5694.assignment1;
+package com.aranjan5694.assignment2;
 
-import com.aranjan5694.assignment1.model.Student;
+import com.aranjan5694.assignment2.model.Student;
 
 import java.util.LinkedList;
 import java.util.stream.Stream;
@@ -28,6 +28,7 @@ public class AssignmentDriver {
 
         // Add element in BTree
         bTree.addElement(abhishek);
+        bTree.addElement(sanatan);
         bTree.addElement(anuj);
         bTree.addElement(kshitij);
         bTree.addElement(hari);

@@ -1,4 +1,4 @@
-package com.aranjan5694.assignment1.model;
+package com.aranjan5694.assignment2.model;
 
 import java.util.ArrayList;
 import java.util.Collections;

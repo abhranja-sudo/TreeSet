@@ -1,6 +1,6 @@
-package com.aranjan5694.assignment1;
+package com.aranjan5694.assignment2;
 
-import com.aranjan5694.assignment1.model.Node;
+import com.aranjan5694.assignment2.model.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +108,11 @@ public class BTree<T extends Comparable<T>> {
         Node<T> node = root;
         while (node != null) {
             if(node.getChildrenSize() == 0){
+                //check for duplicates
+                long count = node.getKeys().stream().filter(s -> s.compareTo(element) == 0).count();
+                if(count >= 1){
+                    return false;  // duplicate items
+                }
                 node.addKey(element);
                 if(node.getKeysSize() <= maxNumberOfKeys) {
                     break;
