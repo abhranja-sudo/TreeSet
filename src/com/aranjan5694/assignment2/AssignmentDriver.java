@@ -13,7 +13,7 @@ public class AssignmentDriver {
     public static void main(String[] args) {
 
         //Implement a B-tree with order 3
-        BTree<Student> bTree = new BTree<>(3);
+        TreeSet<Student> bTree = new TreeSet<>(3);
 
         //Each element in the B-tree contains a Student object. A Student has a name, redid and GPA
         Student abhishek = new Student(101,"Abhishek",4.0);
@@ -60,7 +60,7 @@ public class AssignmentDriver {
         printStudentWithGpaInReverseOrder(4.0, bTree);
     }
 
-    public static void printStudentOnProbation(BTree<Student> bTree){
+    public static void printStudentOnProbation(TreeSet<Student> bTree){
         bTree.traverse()
                 .stream()
                 .filter(student -> student.getGpa() < 2.85)
@@ -68,7 +68,7 @@ public class AssignmentDriver {
                 .forEach(System.out::println);
     }
 
-    public static void printStudentWithGpaInReverseOrder(double GPA, BTree<Student> bTree){
+    public static void printStudentWithGpaInReverseOrder(double GPA, TreeSet<Student> bTree){
         reverse(bTree
                 .traverse()
                 .stream())

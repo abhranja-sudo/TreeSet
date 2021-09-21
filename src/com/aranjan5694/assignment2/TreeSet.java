@@ -1,7 +1,5 @@
 package com.aranjan5694.assignment2;
 
-//import com.aranjan5694.assignment2.model.Node;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.stream.Collectors;
  *
  *  @author Abhishek Ranjan <aranjan5694@sdsu.edu>
  */
-public class BTree<T extends Comparable<T>> {
+public class TreeSet<T extends Comparable<T>> {
 
     private int order;
     private Node<T> root = null;
@@ -28,7 +26,7 @@ public class BTree<T extends Comparable<T>> {
      * Initializes BTree with given order
      * @param order denotes maximum number of child node can have
      */
-    public BTree(int order) {
+    public TreeSet(int order) {
         this.order = order;
         initializeProperties(order);
     }
@@ -36,7 +34,7 @@ public class BTree<T extends Comparable<T>> {
     /**
      * Default constructor. Initialize Btree with order 2
      */
-    public BTree() {
+    public TreeSet() {
         initializeProperties(2);
     }
 
