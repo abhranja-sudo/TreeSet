@@ -2,6 +2,7 @@ package com.aranjan5694.assignment2;
 
 import com.aranjan5694.assignment2.model.Student;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
@@ -58,6 +59,12 @@ public class AssignmentDriver {
                 "the list");
 
         printStudentWithGpaInReverseOrder(4.0, bTree);
+
+        System.out.println("iterator running  ... ");
+        Iterator itr = bTree.iterator();
+        while (itr.hasNext()){
+            System.out.println(itr.next());
+        }
     }
 
     public static void printStudentOnProbation(TreeSet<Student> bTree){

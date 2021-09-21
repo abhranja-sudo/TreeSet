@@ -1,8 +1,6 @@
 package com.aranjan5694.assignment2;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -12,7 +10,7 @@ import java.util.stream.Collectors;
  *
  *  @author Abhishek Ranjan <aranjan5694@sdsu.edu>
  */
-public class TreeSet<E extends Comparable<E>> {
+public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     private int order;
     private Node<E> root = null;
@@ -39,7 +37,21 @@ public class TreeSet<E extends Comparable<E>> {
     }
 
     /**
-     * Helper function called by constructor to initialize BTree
+     * Returns an iterator over the elements contained in this collection.
+     *
+     * @return an iterator over the elements contained in this collection
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new TreeIterator();
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    /**
      * @param order denotes maximum number of child a node can have
      */
     private void initializeProperties(int order){
@@ -249,6 +261,67 @@ public class TreeSet<E extends Comparable<E>> {
         }
         return left;
     }
+
+    private final class TreeIterator implements Iterator<E> {
+
+        private Stack<Node<E>> nodeStack;
+        private Stack<Integer> indexStack;
+
+        public TreeIterator() {
+            nodeStack  = new Stack<>();
+            indexStack = new Stack<>();
+            if (root.getKeysSize() > 0)
+                pushLeftPath(root);
+        }
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return !nodeStack.isEmpty();
+        }
+
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public E next() {
+            if (!hasNext())
+                throw new NoSuchElementException();
+
+            Node<E> node = nodeStack.peek();
+            int index = indexStack.pop();
+            E result = node.getKey(index);
+            index++;
+            if (index < node.getKeysSize())
+                indexStack.push(index);
+            else
+                nodeStack.pop();
+            if (!(node.getChildrenSize() == 0))
+                pushLeftPath(node.getChild(index));
+            return result;
+        }
+
+        private void pushLeftPath(Node<E> node) {
+            while (true) {
+                nodeStack.push(node);
+                indexStack.push(0);
+                if (node.getChildrenSize() == 0)
+                    break;
+                node = node.getChild(0);
+            }
+        }
+    }
+
 
     private static class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
         private List<T> keys;
