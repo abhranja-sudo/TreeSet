@@ -12,6 +12,13 @@ import java.util.stream.Collectors;
  */
 public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
+    /**
+     * The comparator used to maintain order in this tree map, or
+     * null if it uses the natural ordering of its keys.
+     *
+     * @serial
+     */
+    private Comparator<? super E> comparator;
     private int order;
     private Node<E> root = null;
     private int minNumberOfKeys;
@@ -27,6 +34,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     public TreeSet(int order) {
         this.order = order;
         initializeProperties(order);
+    }
+
+    public TreeSet(int order, Comparator<? super E> comparator ) {
+        this.order = order;
+        this.comparator = comparator;
     }
 
     /**
