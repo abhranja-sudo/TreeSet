@@ -39,6 +39,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     public TreeSet(int order, Comparator<? super E> comparator ) {
         this.order = order;
         this.comparator = comparator;
+        initializeProperties(order);
     }
 
     /**
