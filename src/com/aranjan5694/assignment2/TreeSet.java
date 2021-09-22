@@ -33,6 +33,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     public TreeSet(int order) {
         this.order = order;
+        comparator = null;
         initializeProperties(order);
     }
 
@@ -46,7 +47,9 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * Default constructor. Initialize Btree with order 2
      */
     public TreeSet() {
-        initializeProperties(2);
+        this.comparator = null;
+        int order = 2;
+        initializeProperties(order);
     }
 
     /**
@@ -72,6 +75,15 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         maxNumberOfKeys = maxNumberOfChild - 1;
         minNumberOfKeys = 1;
         minNumberOfChild = minNumberOfKeys + 1;
+    }
+
+    /**
+     * Compares two keys using the correct comparison method for this TreeMap.
+     */
+    @SuppressWarnings("unchecked")
+    final int compare(Object e1, Object e2) {
+        return comparator==null ? ((Comparable<? super E>)e1).compareTo((E)e2)
+                : comparator.compare((E)e1, (E)e2);
     }
 
     /**
@@ -163,16 +175,17 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     private Node<E> navigateNextNode(Node<E> node, E keyToAdd) {
 
-        if(keyToAdd.compareTo(node.getKey(node.getKeysSize() - 1)) > 0) {
+        if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
             return node.getChild(node.getKeysSize());
         }
 
-        if (keyToAdd.compareTo(node.getKey(0)) <= 0) {
+        if (compare(keyToAdd, node.getKey(0)) <= 0) {
             return node.getChild(0);
         }
 
         for (int i = 1; i < node.getKeysSize(); i++) {
-            if (keyToAdd.compareTo(node.getKey(i)) <= 0 && keyToAdd.compareTo(node.getKey(i - 1)) > 0) {
+
+            if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
                 return node.getChild(i);
             }
         }
@@ -335,9 +348,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-
-    private static class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
-        private List<T> keys;
+    private class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
+        private List<E> keys;
         private List<Node<T>> children;
         private Node<T> parent;
 
@@ -401,23 +413,23 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return children.get(index);
         }
 
-        public T getKey(int index) {
+        public E getKey(int index) {
             return keys.get(index);
         }
 
-        public void addKey(T element){
+        public void addKey(E element){
             keys.add(element);
-            Collections.sort(keys);
+            Collections.sort(keys, comparator);
         }
         public int getKeysSize() {
             return keys.size();
         }
 
-        public List<T> getKeys() {
+        public List<E> getKeys() {
             return keys;
         }
 
-        public void setKeys(List<T> keys) {
+        public void setKeys(List<E> keys) {
             this.keys = keys;
         }
 
@@ -443,7 +455,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         @Override
         public int compareTo(Node<T> o) {
-            return this.keys.get(0).compareTo(o.getKey(0));
+            return compare(this.keys.get(0), o.getKey(0));
         }
     }
 }

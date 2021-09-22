@@ -1,9 +1,10 @@
 package com.aranjan5694.assignment2;
 
-import apple.laf.JRSUIUtils;
 import com.aranjan5694.assignment2.model.Student;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.stream.Stream;
 
 /**
@@ -13,23 +14,8 @@ public class AssignmentDriver {
 
     public static void main(String[] args) {
 
-//        SortedSet<Map.Entry<String, Double>> sortedset = new java.util.TreeSet<>(
-//                new Comparator<Map.Entry<String, Double>>() {
-//                    @Override
-//                    public int compare(Map.Entry<String, Double> e1,
-//                                       Map.Entry<String, Double> e2) {
-//                        return e1.getValue().compareTo(e2.getValue());
-//                    }
-//                });
-//
-//
-//        java.util.TreeSet<Student> treeSet = new java.util.TreeSet<>(
-//                Comparator.comparing(Student::getName)
-//        );
-
-
         //Implement a B-tree with order 3
-        TreeSet<Student> bTree = new TreeSet<>(3, Comparator.comparing(Student::getName));
+        TreeSet<Student> bTree = new TreeSet<>(3, Comparator.comparing(Student::getRedId));
 
         //Each element in the B-tree contains a Student object. A Student has a name, redid and GPA
         Student abhishek = new Student(101,"Abhishek",4.0);
