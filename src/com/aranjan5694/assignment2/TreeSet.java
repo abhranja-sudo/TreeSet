@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     /**
-     * The comparator used to maintain order in this tree map, or
+     * The comparator used to maintain getOrderingStrategy in this tree map, or
      * null if it uses the natural ordering of its keys.
      *
      * @serial
@@ -28,7 +28,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     private int size;
 
     /**
-     * Initializes BTree with given order
+     * Initializes BTree with given getOrderingStrategy
      * @param order denotes maximum number of child node can have
      */
     public TreeSet(int order) {
@@ -44,7 +44,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     }
 
     /**
-     * Default constructor. Initialize Btree with order 2
+     * Default constructor. Initialize Btree with getOrderingStrategy 2
      */
     public TreeSet() {
         this.comparator = null;
@@ -419,7 +419,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         public void addKey(E element){
             keys.add(element);
-            Collections.sort(keys, comparator);
+            keys.sort(comparator);
         }
         public int getKeysSize() {
             return keys.size();
