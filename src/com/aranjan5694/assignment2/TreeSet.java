@@ -93,17 +93,21 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @return kth element in B-Tree
      */
     public E getElement(int k){
-        if(k >= size){
-            throw new IndexOutOfBoundsException("k is out of bound!");
+        int counter = 0;
+        for(E element: this){
+            if(counter == k) {
+                return element;
+            }
+            counter++;
         }
-        return traverse().get(k);
+        throw new IndexOutOfBoundsException("k is out of bound!");
     }
 
     /**
      * Traverse the tree In-Order
      * @return List containing lexicographically sorted element
      */
-    public List<E> traverse(){
+    public List<E> traverseInorder(){
         ArrayList<E> element = new ArrayList<>();
         root.traverse(element);
         return element;
