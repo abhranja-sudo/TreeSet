@@ -1,6 +1,7 @@
 package com.aranjan5694.assignment2;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -288,6 +289,31 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         return left;
     }
 
+
+    /**
+     * Internal Iterator.
+     * Performs the given action for each element of the {@code Iterable}
+     * until all elements have been processed or the action throws an
+     * exception.  Unless otherwise specified by the implementing class,
+     * actions are performed in the order of iteration (if an iteration order
+     * is specified).  Exceptions thrown by the action are relayed to the
+     * caller.
+     * @param action The action to be performed for each element
+     * @throws NullPointerException if the specified action is null
+     * @since 1.8
+     */
+    @Override
+    public void forEach(Consumer<? super E> action) {
+        Objects.requireNonNull(action);
+        Stack<E> stack = new Stack<>();
+        for (E e : this) {
+            stack.push(e);
+        }
+        while (!stack.isEmpty()) {
+            action.accept(stack.pop());
+        }
+    }
+
     private final class TreeIterator implements Iterator<E> {
 
         private Stack<Node<E>> nodeStack;
@@ -297,7 +323,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             nodeStack  = new Stack<>();
             indexStack = new Stack<>();
             if (root.getKeysSize() > 0)
-                pushLeftPath(root);
+                pushLeftChild(root);
         }
 
         /**
@@ -311,7 +337,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         public boolean hasNext() {
             return !nodeStack.isEmpty();
         }
-
 
         /**
          * Returns the next element in the iteration.
@@ -333,11 +358,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             else
                 nodeStack.pop();
             if (!(node.getChildrenSize() == 0))
-                pushLeftPath(node.getChild(index));
+                pushLeftChild(node.getChild(index));
             return result;
         }
 
-        private void pushLeftPath(Node<E> node) {
+        private void pushLeftChild(Node<E> node) {
             while (true) {
                 nodeStack.push(node);
                 indexStack.push(0);
