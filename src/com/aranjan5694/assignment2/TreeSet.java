@@ -105,30 +105,10 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     public List<E> traverse(){
         ArrayList<E> element = new ArrayList<>();
-        traverseHelper(root, element);
+        root.traverse(element);
         return element;
     }
 
-    /**
-     * Helper function called by traverse. Recursively traverse the tree In-Order
-     * @param node the node where traversal starts
-     * @param list accumulates lexicographically sorted element
-     */
-    private void traverseHelper(Node<E> node, ArrayList<E> list){
-        if(node.getChildrenSize() == 0){
-            node.getKeys()
-                .stream()
-                .collect(Collectors.toCollection(() -> list));
-            return;
-        }
-
-        for(int i = 0;i <= node.getKeysSize(); i++){
-            traverseHelper(node.getChild(i), list);
-            if(i != node.getKeysSize()){
-                list.add(node.getKey(i));
-            }
-        }
-    }
 
     /**
      * * Adds the specified element to this set if it is not already present.
@@ -162,35 +142,10 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                 }
                 split(node);
             }
-            node = navigateNextNode(node, e);
+            node = node.navigateNextNode(node, e);
         }
         size++;
         return true;
-    }
-
-    /**
-     * Helper function called by addElement for next candidate node down the root for element to add
-     * @param node Node to compare key with
-     * @param keyToAdd key to be added in tree
-     * @return candidate Node where key can be inserted
-     */
-    private Node<E> navigateNextNode(Node<E> node, E keyToAdd) {
-
-        if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
-            return node.getChild(node.getKeysSize());
-        }
-
-        if (compare(keyToAdd, node.getKey(0)) <= 0) {
-            return node.getChild(0);
-        }
-
-        for (int i = 1; i < node.getKeysSize(); i++) {
-
-            if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
-                return node.getChild(i);
-            }
-        }
-        return node;
     }
 
     /**
@@ -215,22 +170,15 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             createNewRoot(node, left, right);
         }
         else {
-            adjustMedianUpToParent(node, left, right);
-        }
-    }
+            Node<E> parent = node.getParent();
+            parent.addKey(node.getKey(node.getKeysSize() / 2));
+            parent.removeChild(node);
+            parent.addChildNode(left);
+            parent.addChildNode(right);
 
-    /**
-     * Helper function. Called by split() to move the median value up to the parent
-     */
-    private void adjustMedianUpToParent(Node<E> node, Node<E> left, Node<E> right) {
-        Node<E> parent = node.getParent();
-        parent.addKey(node.getKey(node.getKeysSize() / 2));
-        parent.removeChild(node);
-        parent.addChildNode(left);
-        parent.addChildNode(right);
-
-        if (parent.getKeysSize() > maxNumberOfKeys){
-            split(parent);
+            if (parent.getKeysSize() > maxNumberOfKeys){
+                split(parent);
+            }
         }
     }
 
@@ -401,6 +349,51 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                 }
             }
             return false;
+        }
+
+        /**
+         * get next candidate node
+         * @param node Node to compare key with
+         * @param keyToAdd key to be added in tree
+         * @return candidate Node where key can be inserted
+         */
+         Node<E> navigateNextNode(Node<E> node, E keyToAdd) {
+
+            if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
+                return node.getChild(node.getKeysSize());
+            }
+
+            if (compare(keyToAdd, node.getKey(0)) <= 0) {
+                return node.getChild(0);
+            }
+
+            for (int i = 1; i < node.getKeysSize(); i++) {
+
+                if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
+                    return node.getChild(i);
+                }
+            }
+            return node;
+        }
+
+        /**
+         * Helper function called by traverse. Recursively traverse the tree In-Order
+         * @param list accumulates lexicographically sorted element
+         */
+        private void traverse(ArrayList<E> list){
+            if(this.getChildrenSize() == 0){
+                this.getKeys()
+                        .stream()
+                        .collect(Collectors.toCollection(() -> list));
+                return;
+            }
+
+            for(int i = 0;i <= this.getKeysSize(); i++){
+                this.getChild(i).traverse(list);
+                if(i != this.getKeysSize()){
+                    list.add(this.getKey(i));
+                }
+            }
         }
 
         /**
