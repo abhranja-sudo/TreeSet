@@ -104,18 +104,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
         throw new IndexOutOfBoundsException("k is out of bound!");
     }
-
-    /**
-     * Traverse the tree In-Order
-     * @return List containing lexicographically sorted element
-     */
-    public List<E> traverseInorder(){
-        ArrayList<E> element = new ArrayList<>();
-        root.traverse(element);
-        return element;
-    }
-
-
     /**
      * * Adds the specified element to this set if it is not already present.
      *      * More formally, adds the specified element {@code e} to this set if
@@ -246,6 +234,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     /**
      * Internal Iterator.
+     *
      * Performs the given action for each element of the {@code Iterable}
      * until all elements have been processed or the action throws an
      * exception.  Unless otherwise specified by the implementing class,
@@ -380,26 +369,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                 }
             }
             return node;
-        }
-
-        /**
-         * Helper function called by traverse. Recursively traverse the tree In-Order
-         * @param list accumulates lexicographically sorted element
-         */
-        private void traverse(ArrayList<E> list){
-            if(this.getChildrenSize() == 0){
-                this.getKeys()
-                        .stream()
-                        .collect(Collectors.toCollection(() -> list));
-                return;
-            }
-
-            for(int i = 0;i <= this.getKeysSize(); i++){
-                this.getChild(i).traverse(list);
-                if(i != this.getKeysSize()){
-                    list.add(this.getKey(i));
-                }
-            }
         }
 
         /**
