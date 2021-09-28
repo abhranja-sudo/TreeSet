@@ -1,4 +1,6 @@
-package com.aranjan5694.assignment2.model;
+package com.aranjan5694.assignment2.model.strategy;
+
+import com.aranjan5694.assignment2.model.Student;
 
 import java.util.Comparator;
 

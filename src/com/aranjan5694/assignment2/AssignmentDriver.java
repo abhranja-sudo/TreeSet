@@ -1,8 +1,8 @@
 package com.aranjan5694.assignment2;
 
-import com.aranjan5694.assignment2.model.GPAOrderingStrategy;
-import com.aranjan5694.assignment2.model.NameOrderingStrategy;
-import com.aranjan5694.assignment2.model.OrderingContext;
+import com.aranjan5694.assignment2.model.strategy.GPAOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.NameOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.OrderingContext;
 import com.aranjan5694.assignment2.model.Student;
 
 import java.util.*;
@@ -19,6 +19,10 @@ public class AssignmentDriver {
         OrderingContext orderingByName = new OrderingContext(new NameOrderingStrategy());
         OrderingContext orderingByGPA = new OrderingContext(new GPAOrderingStrategy());
 
+//        java.util.TreeSet utilSet = new java.util.TreeSet();
+//        utilSet.forEach(System.out::println);
+
+//        TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
         TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
 
         //Each element in the B-tree contains a Student object. A Student has a name, redid and GPA
@@ -31,6 +35,10 @@ public class AssignmentDriver {
         Student gaurav = new Student(115,"Gaurav",3.43);
         Student saurav = new Student(116,"Saurav",2.8);
         Student saurabh = new Student(117,"Saurabh",3.43);
+//        utilSet.add(abhishek);
+//        utilSet.add(anuj);
+//        utilSet.add(hari);
+//        System.out.println(utilSet);
 
         // Add element in BTree
         bTree.add(abhishek);
@@ -46,16 +54,14 @@ public class AssignmentDriver {
 
         //Given a k,your code returns the kth element in the B-tree in lexicographical getOrderingStrategy.
         // If k is out-of-bounds throw an exception.
-        bTree.getElement(5);
+        System.out.println(bTree.getElement(5));
 
-        // Out of bounds exception
-        try{
-            bTree.getElement(9);
-        }catch (IndexOutOfBoundsException e){
-            e.printStackTrace();
-        }
-
-        List<Integer> lis = new ArrayList<>();
+//        // Out of bounds exception
+//        try{
+//            bTree.getElement(9);
+//        }catch (IndexOutOfBoundsException e){
+//            e.printStackTrace();
+//        }
 
         System.out.println("Print out the RedIds of the students that are on probation(GPA less than 2.85) that in the\n" +
                 "list from the front to the back of the list.");
@@ -69,13 +75,14 @@ public class AssignmentDriver {
 
         System.out.println("iterator running  ... ");
         for (Student student : bTree) {
-            System.out.println(student);
+                System.out.println(student);
         }
+
+//        bTree.forEach(System.out::println);
     }
 
     public static void printStudentOnProbation(TreeSet<Student> bTree){
-        bTree.traverse()
-                .stream()
+        bTree.stream()
                 .filter(student -> student.getGpa() < 2.85)
                 .map(Student::getName)
                 .forEach(System.out::println);
@@ -83,7 +90,6 @@ public class AssignmentDriver {
 
     public static void printStudentWithGpaInReverseOrder(double GPA, TreeSet<Student> bTree){
         reverse(bTree
-                .traverse()
                 .stream())
                 .filter(student -> student.getGpa() == GPA)
                 .map(Student::getName)
