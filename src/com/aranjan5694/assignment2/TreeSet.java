@@ -136,7 +136,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             duplicate = true;
         }
         if(duplicate){
-            return true;
+            return false;
         }
 
         node.addKey(e);
