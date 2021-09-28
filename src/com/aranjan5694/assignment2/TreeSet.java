@@ -2,7 +2,6 @@ package com.aranjan5694.assignment2;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  *  The aim for this TreeSet to be able to replace java.util.TreeSet. Our TreeSet uses B-Tree for implementation instead of
@@ -104,6 +103,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
         throw new IndexOutOfBoundsException("k is out of bound!");
     }
+
     /**
      * * Adds the specified element to this set if it is not already present.
      *      * More formally, adds the specified element {@code e} to this set if
@@ -125,14 +125,16 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         Node<E> node = root;
         while (node != null) {
             if(node.getChildrenSize() == 0){
-                //check for duplicates
+
+                //check for duplicates, return false if duplicate
                 long count = node.getKeys()
                         .stream()
                         .filter(s -> s.compareTo(e) == 0)
                         .count();
                 if(count >= 1){
-                    return false;  // duplicate items
+                    return false;
                 }
+
                 node.addKey(e);
                 if(node.getKeysSize() <= maxNumberOfKeys) {
                     break;
