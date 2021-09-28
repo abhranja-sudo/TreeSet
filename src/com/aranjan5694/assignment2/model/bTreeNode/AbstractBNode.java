@@ -9,16 +9,17 @@ public abstract class AbstractBNode<E> implements BNode<E>, Comparable<AbstractB
     private List<E> keys;
     private List<BNode<E>> children;
     private BNode<E> parent;
-    private Comparator<E> comparator;
+    private Comparator<? super E> comparator;
 
     public void setParent(BNode<E> parent) {
         this.parent = parent;
     }
 
-    public AbstractBNode(BNode<E> parent) {
+    public AbstractBNode(BNode<E> parent, Comparator<? super E> comparator) {
         this.keys = new ArrayList<>();
         this.children = new ArrayList<>();
         this.parent = parent;
+        this.comparator = comparator;
     }
 
     /**
@@ -123,7 +124,7 @@ public abstract class AbstractBNode<E> implements BNode<E>, Comparable<AbstractB
 
     public void addKey(E element){
         keys.add(element);
-        keys.sort((Comparator<? super E>) comparator);
+        keys.sort(comparator);
     }
     public int getKeysSize() {
         return keys.size();

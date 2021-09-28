@@ -23,7 +23,7 @@ public class AssignmentDriver {
 //        utilSet.forEach(System.out::println);
 
 //        TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
-        TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
+        TreeSet<Student> bTree = new TreeSet<>(3, orderingByGPA.getOrderingStrategy());
 
         //Each element in the B-tree contains a Student object. A Student has a name, redid and GPA
         Student abhishek = new Student(101,"Abhishek",4.0);
