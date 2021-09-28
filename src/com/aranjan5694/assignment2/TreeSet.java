@@ -1,5 +1,7 @@
 package com.aranjan5694.assignment2;
 
+import com.aranjan5694.assignment2.model.bTreeNode.BNode;
+
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -22,7 +24,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     private Comparator<? super E> comparator;
     private int order;
-    private Node<E> root = null;
+    private BTreeNode<E> root = null;
     private int minNumberOfKeys;
     private int maxNumberOfKeys;
     private int minNumberOfChild;
@@ -122,7 +124,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return true;
         }
 
-        Node<E> node = root;
+        BNode<E> node = root;
         while (node.getChildrenSize() != 0) {
             node = node.navigateNextNode(node, e);
         }
@@ -153,7 +155,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param key Key to be added to newly created root
      */
     private void initializeRoot(E key){
-        root = new Node<>(null);
+        root = new BTreeNode<>(null);
         root.addKey(key);
     }
 
@@ -161,16 +163,16 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * splits the node. called when keys size is greater than maximum keys allowed in node
      * @param node Node to split
      */
-    private void split(Node<E> node) {
+    private void split(BNode<E> node) {
 
-        Node<E> left = createLeftNode(node);
-        Node<E> right = createRightNode(node);
+        BTreeNode<E> left = createLeftNode(node);
+        BTreeNode<E> right = createRightNode(node);
 
         if (node.getParent() == null) {
             createNewRoot(node, left, right);
         }
         else {
-            Node<E> parent = node.getParent();
+            BNode<E> parent = node.getParent();
             parent.addKey(node.getKey(node.getKeysSize() / 2));
             parent.removeChild(node);
             parent.addChildNode(left);
@@ -189,8 +191,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param left add left node to the child of node
      * @param right right node to be added as child of node
      */
-    private void createNewRoot(Node<E> node, Node<E> left, Node<E> right) {
-        Node<E> newRoot = new Node<>(null);
+    private void createNewRoot(BNode<E> node, BNode<E> left, BNode<E> right) {
+        BTreeNode<E> newRoot = new BTreeNode<>(null);
         newRoot.addKey(node.getKey(node.getKeysSize() / 2));
         node.setParent(newRoot);
         root = newRoot;
@@ -205,8 +207,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param node Node that is splitting up
      * @return right node
      */
-    private Node<E> createRightNode(Node<E> node) {
-        Node<E> right = new Node<>(null);
+    private BTreeNode<E> createRightNode(BNode<E> node) {
+        BTreeNode<E> right = new BTreeNode<>(null);
         for (int i = node.getKeysSize() / 2 + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
         }
@@ -224,8 +226,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param node  Node that is splitting up
      * @return left node
      */
-    private Node<E> createLeftNode(Node<E> node) {
-        Node<E> left = new Node<>(null);
+    private BTreeNode<E> createLeftNode(BNode<E> node) {
+        BTreeNode<E> left = new BTreeNode<>(null);
         for (int i = 0; i < node.getKeysSize() / 2; i++) {
             left.addKey(node.getKey(i));
         }
@@ -265,7 +267,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     private final class TreeIterator implements Iterator<E> {
 
-        private Stack<Node<E>> nodeStack;
+        private Stack<BNode<E>> nodeStack;
         private Stack<Integer> indexStack;
 
         public TreeIterator() {
@@ -298,7 +300,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             if (!hasNext())
                 throw new NoSuchElementException();
 
-            Node<E> node = nodeStack.peek();
+            BNode<E> node = nodeStack.peek();
             int index = indexStack.pop();
             E result = node.getKey(index);
             index++;
@@ -311,7 +313,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return result;
         }
 
-        private void pushLeftChild(Node<E> node) {
+        private void pushLeftChild(BNode<E> node) {
             while (true) {
                 nodeStack.push(node);
                 indexStack.push(0);
@@ -322,12 +324,17 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    private class Node<E> implements Comparable<Node<E>>{
+    private class BTreeNode<E>
+            implements BNode<E>, Comparable<BTreeNode<E>> {
         private List<E> keys;
-        private List<Node<E>> children;
-        private Node<E> parent;
+        private List<BNode<E>> children;
+        private BNode<E> parent;
 
-        public Node(Node<E> parent) {
+        public void setParent(BNode<E> parent) {
+            this.parent = parent;
+        }
+
+        public BTreeNode(BNode<E> parent) {
             this.keys = new ArrayList<>();
             this.children = new ArrayList<>();
             this.parent = parent;
@@ -338,7 +345,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param child Node to removed
          * @return true if successfully removed
          */
-        public boolean removeChild(Node<E> child) {
+        public boolean removeChild(BNode<E> child) {
             if (this.getChildrenSize() == 0){
                 return false;
             }
@@ -358,8 +365,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param keyToAdd key to be added in tree
          * @return candidate Node where key can be inserted
          */
-         Node<E> navigateNextNode(Node<E> node, E keyToAdd) {
-
+        @Override
+        public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
             if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
                 return node.getChild(node.getKeysSize());
             }
@@ -375,13 +382,13 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                 }
             }
             return node;
-        }
+         }
 
         /**
          *  Function to shift node left starting with index
          * @param index from where shifting is to be done
          */
-        public void shiftLeft(int index, List<Node<E>> list) {
+        public void shiftLeft(int index, List<BNode<E>> list) {
             while( index < list.size()){
                 list.set( index - 1, list.get(index));
                 index++;
@@ -393,10 +400,10 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param child Node to be added as child
          * @return true if child is successfully added
          */
-        public boolean addChildNode(Node<E> child) {
-            child.parent = this;
+        public boolean addChildNode(BNode<E> child) {
+            child.setParent(this);
             children.add(child);
-            Collections.sort(children);
+            Collections.sort((List<BTreeNode<E>>) (List<?>)children);
             return true;
         }
 
@@ -405,7 +412,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param index Index of the child need to get
          * @return Node at a particular index
          */
-        public Node<E> getChild(int index) {
+        public BNode<E> getChild(int index) {
             if (index >= children.size()){
                 return null;
             }
@@ -436,24 +443,58 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return children.size();
         }
 
-        public List<Node<E>> getChildren() {
+        public List<BNode<E>> getChildren() {
             return children;
         }
 
-        public void setChildren(List<Node<E>> children) {
-            this.children = children;
-        }
-
-        public Node<E> getParent() {
+        public BNode<E> getParent() {
             return parent;
         }
 
-        public void setParent(Node<E> parent) {
+        public void setParent(BTreeNode<E> parent) {
             this.parent = parent;
         }
 
+        /**
+         * Compares this object with the specified object for order.  Returns a
+         * negative integer, zero, or a positive integer as this object is less
+         * than, equal to, or greater than the specified object.
+         *
+         * <p>The implementor must ensure <tt>sgn(x.compareTo(y)) ==
+         * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
+         * implies that <tt>x.compareTo(y)</tt> must throw an exception iff
+         * <tt>y.compareTo(x)</tt> throws an exception.)
+         *
+         * <p>The implementor must also ensure that the relation is transitive:
+         * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
+         * <tt>x.compareTo(z)&gt;0</tt>.
+         *
+         * <p>Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt>
+         * implies that <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for
+         * all <tt>z</tt>.
+         *
+         * <p>It is strongly recommended, but <i>not</i> strictly required that
+         * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>.  Generally speaking, any
+         * class that implements the <tt>Comparable</tt> interface and violates
+         * this condition should clearly indicate this fact.  The recommended
+         * language is "Note: this class has a natural ordering that is
+         * inconsistent with equals."
+         *
+         * <p>In the foregoing description, the notation
+         * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
+         * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
+         * <tt>0</tt>, or <tt>1</tt> according to whether the value of
+         * <i>expression</i> is negative, zero or positive.
+         *
+         * @param o the object to be compared.
+         * @return a negative integer, zero, or a positive integer as this object
+         * is less than, equal to, or greater than the specified object.
+         * @throws NullPointerException if the specified object is null
+         * @throws ClassCastException   if the specified object's type prevents it
+         *                              from being compared to this object.
+         */
         @Override
-        public int compareTo(Node<E> o) {
+        public int compareTo(BTreeNode<E> o) {
             return compare(this.keys.get(0), o.getKey(0));
         }
     }
