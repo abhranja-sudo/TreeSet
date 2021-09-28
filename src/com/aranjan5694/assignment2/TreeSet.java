@@ -123,26 +123,27 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         Node<E> node = root;
-        while (node != null) {
-            if(node.getChildrenSize() == 0){
-
-                //check for duplicates, return false if duplicate
-                long count = node.getKeys()
-                        .stream()
-                        .filter(s -> s.compareTo(e) == 0)
-                        .count();
-                if(count >= 1){
-                    return false;
-                }
-
-                node.addKey(e);
-                if(node.getKeysSize() <= maxNumberOfKeys) {
-                    break;
-                }
-                split(node);
-            }
+        while (node.getChildrenSize() != 0) {
             node = node.navigateNextNode(node, e);
         }
+
+        boolean duplicate = false;
+        long countDuplicate = node.getKeys()
+                .stream()
+                .filter(s -> s.compareTo(e) == 0)
+                .count();
+        if(countDuplicate >= 1){
+            duplicate = true;
+        }
+        if(duplicate){
+            return true;
+        }
+
+        node.addKey(e);
+        if(node.getKeysSize() > maxNumberOfKeys) {
+            split(node);
+        }
+
         size++;
         return true;
     }
