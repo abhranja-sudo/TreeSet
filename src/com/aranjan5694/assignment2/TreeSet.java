@@ -322,12 +322,12 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    private class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
+    private class Node<E> implements Comparable<Node<E>>{
         private List<E> keys;
-        private List<Node<T>> children;
-        private Node<T> parent;
+        private List<Node<E>> children;
+        private Node<E> parent;
 
-        public Node(Node<T> parent) {
+        public Node(Node<E> parent) {
             this.keys = new ArrayList<>();
             this.children = new ArrayList<>();
             this.parent = parent;
@@ -338,7 +338,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param child Node to removed
          * @return true if successfully removed
          */
-        public boolean removeChild(Node<T> child) {
+        public boolean removeChild(Node<E> child) {
             if (this.getChildrenSize() == 0){
                 return false;
             }
@@ -381,7 +381,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          *  Function to shift node left starting with index
          * @param index from where shifting is to be done
          */
-        public void shiftLeft(int index, List<Node<T>> list) {
+        public void shiftLeft(int index, List<Node<E>> list) {
             while( index < list.size()){
                 list.set( index - 1, list.get(index));
                 index++;
@@ -393,7 +393,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param child Node to be added as child
          * @return true if child is successfully added
          */
-        public boolean addChildNode(Node<T> child) {
+        public boolean addChildNode(Node<E> child) {
             child.parent = this;
             children.add(child);
             Collections.sort(children);
@@ -405,7 +405,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param index Index of the child need to get
          * @return Node at a particular index
          */
-        public Node<T> getChild(int index) {
+        public Node<E> getChild(int index) {
             if (index >= children.size()){
                 return null;
             }
@@ -418,7 +418,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         public void addKey(E element){
             keys.add(element);
-            keys.sort(comparator);
+            keys.sort((Comparator<? super E>) comparator);
         }
         public int getKeysSize() {
             return keys.size();
@@ -436,24 +436,24 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return children.size();
         }
 
-        public List<Node<T>> getChildren() {
+        public List<Node<E>> getChildren() {
             return children;
         }
 
-        public void setChildren(List<Node<T>> children) {
+        public void setChildren(List<Node<E>> children) {
             this.children = children;
         }
 
-        public Node<T> getParent() {
+        public Node<E> getParent() {
             return parent;
         }
 
-        public void setParent(Node<T> parent) {
+        public void setParent(Node<E> parent) {
             this.parent = parent;
         }
 
         @Override
-        public int compareTo(Node<T> o) {
+        public int compareTo(Node<E> o) {
             return compare(this.keys.get(0), o.getKey(0));
         }
     }
