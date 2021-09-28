@@ -1,5 +1,6 @@
 package com.aranjan5694.assignment2;
 
+import com.aranjan5694.assignment2.model.bTreeNode.AbstractBNode;
 import com.aranjan5694.assignment2.model.bTreeNode.BNode;
 
 import java.util.*;
@@ -323,38 +324,10 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     }
 
     private class BTreeNode<E>
-            implements BNode<E>, Comparable<BTreeNode<E>> {
-        private List<E> keys;
-        private List<BNode<E>> children;
-        private BNode<E> parent;
-
-        public void setParent(BNode<E> parent) {
-            this.parent = parent;
-        }
+            extends AbstractBNode<E> {
 
         public BTreeNode(BNode<E> parent) {
-            this.keys = new ArrayList<>();
-            this.children = new ArrayList<>();
-            this.parent = parent;
-        }
-
-        /**
-         * Remove child node
-         * @param child Node to removed
-         * @return true if successfully removed
-         */
-        public boolean removeChild(BNode<E> child) {
-            if (this.getChildrenSize() == 0){
-                return false;
-            }
-            for (int i = 0; i < this.getChildrenSize(); i++) {
-                if (children.get(i).equals(child)) {
-                    shiftLeft(i + 1, children);
-                    children.remove(children.size() - 1);
-                    return true;
-                }
-            }
-            return false;
+            super(parent);
         }
 
         /**
@@ -383,84 +356,13 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                     return node.getChild(i);
                 }
             }
-            if(node.getChildrenSize() == 0) {
-                BTreeNodeLeaves bTreeNodeLeaves = (BTreeNodeLeaves)node;
-                bTreeNodeLeaves.getNodeToInsert(node, keyToAdd);
-            }
+        if(node.getChildrenSize() == 0) {
+            TreeSet.BTreeNodeLeaves bTreeNodeLeaves = (TreeSet.BTreeNodeLeaves)node;
+            bTreeNodeLeaves.getNodeToInsert(node, keyToAdd);
+        }
+
             return node.getNodeToInsert(node, keyToAdd);
-         }
-
-        /**
-         *  Function to shift node left starting with index
-         * @param index from where shifting is to be done
-         */
-        public void shiftLeft(int index, List<BNode<E>> list) {
-            while( index < list.size()){
-                list.set( index - 1, list.get(index));
-                index++;
-            }
         }
-
-        /**
-         * Add the child to the node
-         * @param child Node to be added as child
-         * @return true if child is successfully added
-         */
-        public boolean addChildNode(BNode<E> child) {
-            child.setParent(this);
-            children.add(child);
-            Collections.sort((List<BTreeNode<E>>) (List<?>)children);
-            return true;
-        }
-
-        /**
-         * get the child at any particular index
-         * @param index Index of the child need to get
-         * @return Node at a particular index
-         */
-        public BNode<E> getChild(int index) {
-            if (index >= children.size()){
-                return null;
-            }
-            return children.get(index);
-        }
-
-        public E getKey(int index) {
-            return keys.get(index);
-        }
-
-        public void addKey(E element){
-            keys.add(element);
-            keys.sort((Comparator<? super E>) comparator);
-        }
-        public int getKeysSize() {
-            return keys.size();
-        }
-
-        public List<E> getKeys() {
-            return keys;
-        }
-
-        public void setKeys(List<E> keys) {
-            this.keys = keys;
-        }
-
-        public int getChildrenSize() {
-            return children.size();
-        }
-
-        public List<BNode<E>> getChildren() {
-            return children;
-        }
-
-        public BNode<E> getParent() {
-            return parent;
-        }
-
-        public void setParent(BTreeNode<E> parent) {
-            this.parent = parent;
-        }
-
         /**
          * Compares this object with the specified object for order.  Returns a
          * negative integer, zero, or a positive integer as this object is less
@@ -499,14 +401,14 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @throws ClassCastException   if the specified object's type prevents it
          *                              from being compared to this object.
          */
-        @Override
-        public int compareTo(BTreeNode<E> o) {
-            return compare(this.keys.get(0), o.getKey(0));
-        }
+//        @Override
+//        public int compareTo(BTreeNode<E> o) {
+//            return compare(this.keys.get(0), o.getKey(0));
+//        }
     }
 
     private class BTreeNodeLeaves<E>
-            extends BTreeNode<E> {
+            extends AbstractBNode<E> {
 
         public BTreeNodeLeaves(BNode<E> parent) {
             super(parent);
