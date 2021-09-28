@@ -126,7 +126,10 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         while (node != null) {
             if(node.getChildrenSize() == 0){
                 //check for duplicates
-                long count = node.getKeys().stream().filter(s -> s.compareTo(e) == 0).count();
+                long count = node.getKeys()
+                        .stream()
+                        .filter(s -> s.compareTo(e) == 0)
+                        .count();
                 if(count >= 1){
                     return false;  // duplicate items
                 }
