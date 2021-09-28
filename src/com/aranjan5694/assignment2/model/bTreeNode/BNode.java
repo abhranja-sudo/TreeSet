@@ -34,5 +34,5 @@ public interface BNode<E> {
      */
     BNode<E> getChild(int index);
 
-    BNode<E> navigateNextNode(BNode<E> node, E keyToAdd);
+    BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd);
 }

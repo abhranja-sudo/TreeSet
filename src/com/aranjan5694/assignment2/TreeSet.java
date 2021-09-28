@@ -125,9 +125,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         BNode<E> node = root;
-        while (node.getChildrenSize() != 0) {
-            node = node.navigateNextNode(node, e);
-        }
+        node = node.getNodeToInsert(node, e);
 
         boolean duplicate = false;
         long countDuplicate = node.getKeys()
@@ -366,7 +364,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @return candidate Node where key can be inserted
          */
         @Override
-        public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
+        public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+            if(node.getChildrenSize() == 0) {
+                return node;
+            }
+
             if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
                 return node.getChild(node.getKeysSize());
             }
@@ -381,7 +383,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                     return node.getChild(i);
                 }
             }
-            return node;
+            if(node.getChildrenSize() == 0) {
+                BTreeNodeLeaves bTreeNodeLeaves = (BTreeNodeLeaves)node;
+                bTreeNodeLeaves.getNodeToInsert(node, keyToAdd);
+            }
+            return node.getNodeToInsert(node, keyToAdd);
          }
 
         /**
@@ -496,6 +502,33 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         @Override
         public int compareTo(BTreeNode<E> o) {
             return compare(this.keys.get(0), o.getKey(0));
+        }
+    }
+
+    private class BTreeNodeLeaves<E>
+            extends BTreeNode<E> {
+
+        public BTreeNodeLeaves(BNode<E> parent) {
+            super(parent);
+        }
+
+        @Override
+        public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+            if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
+                return node.getChild(node.getKeysSize());
+            }
+
+            if (compare(keyToAdd, node.getKey(0)) <= 0) {
+                return node.getChild(0);
+            }
+
+            for (int i = 1; i < node.getKeysSize(); i++) {
+
+                if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
+                    return node.getChild(i);
+                }
+            }
+            return node;
         }
     }
 }
