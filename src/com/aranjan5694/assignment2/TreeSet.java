@@ -1,5 +1,7 @@
 package com.aranjan5694.assignment2;
 
+import com.aranjan5694.assignment2.model.INode;
+
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -163,8 +165,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     private void split(Node<E> node) {
 
-        Node<E> left = createLeftNode(node);
-        Node<E> right = createRightNode(node);
+        Node<E> left = createLeft(node);
+        Node<E> right = createRight(node);
 
         if (node.getParent() == null) {
             createNewRoot(node, left, right);
@@ -205,7 +207,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param node Node that is splitting up
      * @return right node
      */
-    private Node<E> createRightNode(Node<E> node) {
+    private Node<E> createRight(Node<E> node) {
         Node<E> right = new Node<>(null);
         for (int i = node.getKeysSize() / 2 + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
@@ -224,7 +226,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param node  Node that is splitting up
      * @return left node
      */
-    private Node<E> createLeftNode(Node<E> node) {
+    private Node<E> createLeft(Node<E> node) {
         Node<E> left = new Node<>(null);
         for (int i = 0; i < node.getKeysSize() / 2; i++) {
             left.addKey(node.getKey(i));
@@ -322,7 +324,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    private class Node<E> implements Comparable<Node<E>>{
+    private class Node<E> implements Comparable<Node<E>>, INode<E> {
         private List<E> keys;
         private List<Node<E>> children;
         private Node<E> parent;
