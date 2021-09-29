@@ -35,6 +35,16 @@ public class AssignmentDriver {
         Student gaurav = new Student(115,"Gaurav",3.43);
         Student saurav = new Student(116,"Saurav",2.8);
         Student saurabh = new Student(117,"Saurabh",3.43);
+
+        Student abhishek1 = new Student(101,"Abhishek1",4.0);
+        Student anuj1 = new Student(102,"Anuj1",4.0);
+        Student kshitij1 = new Student(104,"Kshiti1j",3.8);
+        Student hari1 = new Student(102,"Hari1",4.0);
+        Student aashit1 = new Student(113,"Aasit1", 2.2);
+        Student sanatan1 = new Student(114,"Sanatan1",3.43);
+        Student gaurav1 = new Student(115,"Gaurav1",3.43);
+        Student saurav1 = new Student(116,"Saurav1",2.8);
+        Student saurabh1 = new Student(117,"Saurabh1",3.43);
 //        utilSet.add(abhishek);
 //        utilSet.add(anuj);
 //        utilSet.add(hari);
@@ -52,6 +62,23 @@ public class AssignmentDriver {
         bTree.add(saurav);
         bTree.add(saurabh);
 
+        bTree.add(abhishek1);
+        bTree.add(sanatan1);
+        bTree.add(anuj1);
+        bTree.add(kshitij1);
+        bTree.add(hari1);
+        bTree.add(aashit1);
+        bTree.add(sanatan1);
+        bTree.add(gaurav1);
+        bTree.add(saurav1);
+        bTree.add(saurabh1);
+
+        System.out.println("iterator running  ... ");
+        for (Student student : bTree) {
+            System.out.println(student);
+        }
+
+        System.out.println(" \n get element at k....");
         //Given a k,your code returns the kth element in the B-tree in lexicographical getOrderingStrategy.
         // If k is out-of-bounds throw an exception.
         System.out.println(bTree.getElement(5));
@@ -73,10 +100,7 @@ public class AssignmentDriver {
 
         printStudentWithGpaInReverseOrder(4.0, bTree);
 
-        System.out.println("iterator running  ... ");
-        for (Student student : bTree) {
-                System.out.println(student);
-        }
+
 
 //        bTree.forEach(System.out::println);
     }
