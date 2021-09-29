@@ -46,31 +46,32 @@ public abstract class AbstractBNode<E> implements BNode<E>, Comparable<AbstractB
         return false;
     }
 
-    /**
-     * get next candidate node
-     * @param node Node to compare key with
-     * @param keyToAdd key to be added in tree
-     * @return candidate Node where key can be inserted
-     */
-    @Override
-    public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
-
-        if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
-            return node.getChild(node.getKeysSize());
-        }
-
-        if (compare(keyToAdd, node.getKey(0)) <= 0) {
-            return node.getChild(0);
-        }
-
-        for (int i = 1; i < node.getKeysSize(); i++) {
-
-            if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
-                return node.getChild(i);
-            }
-        }
-        return node;
-    }
+//    /**
+//     * get next candidate node
+//     * @param node Node to compare key with
+//     * @param keyToAdd key to be added in tree
+//     * @return candidate Node where key can be inserted
+//     */
+//    @Override
+//    public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+//        if(node.getChildrenSize() != 0) {
+//            if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
+//                return node.getChild(node.getKeysSize());
+//            }
+//
+//            if (compare(keyToAdd, node.getKey(0)) <= 0) {
+//                return node.getChild(0);
+//            }
+//
+//            for (int i = 1; i < node.getKeysSize(); i++) {
+//
+//                if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
+//                    return node.getChild(i);
+//                }
+//            }
+//        }
+//        return node;
+//    }
 
     /**
      *  Function to shift node left starting with index

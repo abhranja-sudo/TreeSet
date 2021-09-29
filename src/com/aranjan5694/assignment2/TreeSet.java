@@ -335,8 +335,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    public class BTreeNode<E>
-            extends AbstractBNode<E> {
+    public class BTreeNode<E> extends AbstractBNode<E> {
 
         public BTreeNode(BNode<E> parent) {
             super(parent, (Comparator<? super E>) comparator);
@@ -350,13 +349,29 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          */
         @Override
         public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
-            if(node.getChildrenSize() == 0) {
-                return node;
+
+            if(node.getChildrenSize() != 0) {
+                if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
+                    return node.getChild(node.getKeysSize());
+                }
+
+                if (compare(keyToAdd, node.getKey(0)) <= 0) {
+                    return node.getChild(0);
+                }
+
+                for (int i = 1; i < node.getKeysSize(); i++) {
+
+                    if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
+                        return node.getChild(i);
+                    }
+                }
+                return node.getNodeToInsert(node, keyToAdd);
             }
-            node = super.getNodeToInsert(node, keyToAdd);
-            return node.getNodeToInsert(node, keyToAdd);
+
+            return node;
         }
     }
+
 
     public class NullNode<E> extends AbstractBNode<E>{
 
@@ -366,8 +381,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         @Override
         public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
-            root =  new BTreeNode<>(null);
-            return (BNode<E>) root;
+            if(root instanceof NullNode){
+                root =  new BTreeNode<>(null);
+                return (BNode<E>) root;
+            }
+            return null;
         }
 
         @Override
