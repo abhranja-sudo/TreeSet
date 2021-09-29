@@ -78,10 +78,11 @@ public class AssignmentDriver {
             System.out.println(student);
         }
 
-        System.out.println(" \n get element at k....");
+        int k = 7;
+        System.out.println(" \n get element at k...." + k);
         //Given a k,your code returns the kth element in the B-tree in lexicographical getOrderingStrategy.
         // If k is out-of-bounds throw an exception.
-        System.out.println(bTree.getElement(5));
+        System.out.println(bTree.getElement(k));
 
 //        // Out of bounds exception
 //        try{
