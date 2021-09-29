@@ -353,8 +353,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             if(node.getChildrenSize() == 0) {
                 return node;
             }
-            super.getNodeToInsert(node, keyToAdd);
-            return super.getNodeToInsert(node, keyToAdd);
+            node = super.getNodeToInsert(node, keyToAdd);
+            return node.getNodeToInsert(node, keyToAdd);
         }
     }
 
