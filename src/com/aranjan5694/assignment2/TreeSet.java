@@ -25,7 +25,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     private Comparator<? super E> comparator;
     private int order;
-    private BTreeNode<E> root = null;
+    private BNode<E> root = null;
     private int minNumberOfKeys;
     private int maxNumberOfKeys;
     private int minNumberOfChild;
@@ -80,6 +80,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         maxNumberOfKeys = maxNumberOfChild - 1;
         minNumberOfKeys = 1;
         minNumberOfChild = minNumberOfKeys + 1;
+        root = new NullNode<>();
     }
 
     /**
@@ -119,15 +120,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      *      * @return {@code true} if this set did not already contain the specified
      */
     public boolean add(E e){
-        if(root == null){
-            initializeRoot(e);
-            size++;
-            return true;
-        }
 
-        BNode<E> node = root;
-        node = node.getNodeToInsert(node, e);
-
+        BNode<E> node = root.getNodeToInsert(root, e);
         boolean duplicate = false;
         long countDuplicate = node.getKeys()
                 .stream()
@@ -149,13 +143,31 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         return true;
     }
 
-    /**
-     * Create root the first time add key called
-     * @param key Key to be added to newly created root
-     */
-    private void initializeRoot(E key){
-        root = new BTreeNode<>(null);
-        root.addKey(key);
+    @Override
+    public Object[] toArray() {
+        Object[] r = new Object[size()];
+        Iterator<E> it = iterator();
+        for (int i = 0; i < r.length; i++) {
+            r[i] = it.next();
+        }
+        return r;
+    }
+
+    @Override
+    public String toString() {
+        Iterator<E> it = iterator();
+        if (! it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (;;) {
+            E e = it.next();
+            sb.append(Objects.equals(e, this) ? "(this Collection)" : e);
+            if (! it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
     }
 
     /**
@@ -323,7 +335,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    private class BTreeNode<E>
+    public class BTreeNode<E>
             extends AbstractBNode<E> {
 
         public BTreeNode(BNode<E> parent) {
@@ -341,55 +353,103 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             if(node.getChildrenSize() == 0) {
                 return node;
             }
-
-            if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
-                return node.getChild(node.getKeysSize());
-            }
-
-            if (compare(keyToAdd, node.getKey(0)) <= 0) {
-                return node.getChild(0);
-            }
-
-            for (int i = 1; i < node.getKeysSize(); i++) {
-
-                if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
-                    return node.getChild(i);
-                }
-            }
-
-            if(node.getChildrenSize() == 0) {
-                TreeSet.BTreeNodeLeaves bTreeNodeLeaves = (TreeSet.BTreeNodeLeaves)node;
-                bTreeNodeLeaves.getNodeToInsert(node, keyToAdd);
-            }
-
-            return node.getNodeToInsert(node, keyToAdd);
+            super.getNodeToInsert(node, keyToAdd);
+            return super.getNodeToInsert(node, keyToAdd);
         }
     }
 
-    private class BTreeNodeLeaves<E>
-            extends AbstractBNode<E> {
-
-        public BTreeNodeLeaves(BNode<E> parent) {
-            super(parent, (Comparator<? super E>) comparator);
-        }
+    public class NullNode<E> implements BNode<E>{
 
         @Override
         public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
-            if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
-                return node.getChild(node.getKeysSize());
-            }
+            root =  new BTreeNode<>(null);
+            return (BNode<E>) root;
+        }
 
-            if (compare(keyToAdd, node.getKey(0)) <= 0) {
-                return node.getChild(0);
-            }
+        @Override
+        public void setChildren(List<BNode<E>> children) {
 
-            for (int i = 1; i < node.getKeysSize(); i++) {
+        }
 
-                if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
-                    return node.getChild(i);
-                }
-            }
-            return node;
+        @Override
+        public void setParent(BNode<E> parent) {
+
+        }
+
+        @Override
+        public int getChildrenSize() {
+            return 0;
+        }
+
+        @Override
+        public List<E> getKeys() {
+            return null;
+        }
+
+        @Override
+        public void addKey(E element) {
+
+        }
+
+        @Override
+        public boolean removeChild(BNode<E> child) {
+            return false;
+        }
+
+        @Override
+        public int getKeysSize() {
+            return 0;
+        }
+
+        @Override
+        public E getKey(int index) {
+            return null;
+        }
+
+        @Override
+        public List<BNode<E>> getChildren() {
+            return null;
+        }
+
+        @Override
+        public BNode<E> getParent() {
+            return null;
+        }
+
+        /**
+         * Add the child to the node
+         *
+         * @param child Node to be added as child
+         * @return true if child is successfully added
+         */
+        @Override
+        public boolean addChildNode(BNode<E> child) {
+            return false;
+        }
+
+        /**
+         * get the child at any particular index
+         *
+         * @param index Index of the child need to get
+         * @return Node at a particular index
+         */
+        @Override
+        public BNode<E> getChild(int index) {
+            return null;
         }
     }
+
+
+//    private class BTreeNodeLeaves<E>
+//            extends AbstractBNode<E> {
+//
+//        public BTreeNodeLeaves(BNode<E> parent) {
+//            super(parent, (Comparator<? super E>) comparator);
+//        }
+//
+//        @Override
+//        public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+//            return super.getNodeToInsert(node, keyToAdd);
+//        }
+//    }
 }

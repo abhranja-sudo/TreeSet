@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface BNode<E> {
 
+    public void setChildren(List<BNode<E>> children);
+
     void setParent(BNode<E> parent);
 
     int getChildrenSize();
@@ -17,6 +19,8 @@ public interface BNode<E> {
     int getKeysSize();
 
     E getKey(int index);
+
+    public List<BNode<E>> getChildren();
 
     BNode<E> getParent();
 

@@ -19,11 +19,12 @@ public class AssignmentDriver {
         OrderingContext orderingByName = new OrderingContext(new NameOrderingStrategy());
         OrderingContext orderingByGPA = new OrderingContext(new GPAOrderingStrategy());
 
-//        java.util.TreeSet utilSet = new java.util.TreeSet();
+        java.util.TreeSet utilSet = new java.util.TreeSet();
+//        utilSet.add()
 //        utilSet.forEach(System.out::println);
 
 //        TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
-        TreeSet<Student> bTree = new TreeSet<>(3, orderingByGPA.getOrderingStrategy());
+        TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
 
         //Each element in the B-tree contains a Student object. A Student has a name, redid and GPA
         Student abhishek = new Student(101,"Abhishek",4.0);
@@ -35,10 +36,10 @@ public class AssignmentDriver {
         Student gaurav = new Student(115,"Gaurav",3.43);
         Student saurav = new Student(116,"Saurav",2.8);
         Student saurabh = new Student(117,"Saurabh",3.43);
-//        utilSet.add(abhishek);
-//        utilSet.add(anuj);
-//        utilSet.add(hari);
-//        System.out.println(utilSet);
+        utilSet.add(abhishek);
+        utilSet.add(anuj);
+        utilSet.add(hari);
+        System.out.println(utilSet);
 
         // Add element in BTree
         bTree.add(abhishek);
@@ -52,10 +53,15 @@ public class AssignmentDriver {
         bTree.add(saurav);
         bTree.add(saurabh);
 
+//        Object[] students =  bTree.toArray();
+//        Student[] s = (Student[]) utilSet.toArray();
+
+//        Arrays.stream(students).forEach(System.out::println);
+
         //Given a k,your code returns the kth element in the B-tree in lexicographical getOrderingStrategy.
         // If k is out-of-bounds throw an exception.
-        System.out.println(bTree.getElement(5));
-
+//        System.out.println(bTree.getElement(5));
+//
 //        // Out of bounds exception
 //        try{
 //            bTree.getElement(9);
@@ -74,11 +80,11 @@ public class AssignmentDriver {
         printStudentWithGpaInReverseOrder(4.0, bTree);
 
         System.out.println("iterator running  ... ");
-        for (Student student : bTree) {
-                System.out.println(student);
-        }
+//        for (Student student : bTree) {
+//                System.out.println(student);
+//        }
 
-//        bTree.forEach(System.out::println);
+        bTree.forEach(System.out::println);
     }
 
     public static void printStudentOnProbation(TreeSet<Student> bTree){

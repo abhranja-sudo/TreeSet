@@ -8,6 +8,11 @@ import java.util.List;
 public abstract class AbstractBNode<E> implements BNode<E>, Comparable<AbstractBNode<E>>{
     private List<E> keys;
     private List<BNode<E>> children;
+
+    public void setChildren(List<BNode<E>> children) {
+        this.children = children;
+    }
+
     private BNode<E> parent;
     private Comparator<? super E> comparator;
 
@@ -49,9 +54,6 @@ public abstract class AbstractBNode<E> implements BNode<E>, Comparable<AbstractB
      */
     @Override
     public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
-        if(node.getChildrenSize() == 0) {
-            return node;
-        }
 
         if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
             return node.getChild(node.getKeysSize());
@@ -67,11 +69,7 @@ public abstract class AbstractBNode<E> implements BNode<E>, Comparable<AbstractB
                 return node.getChild(i);
             }
         }
-//        if(node.getChildrenSize() == 0) {
-//            TreeSet.BTreeNodeLeaves bTreeNodeLeaves = (TreeSet.BTreeNodeLeaves)node;
-//            bTreeNodeLeaves.getNodeToInsert(node, keyToAdd);
-//        }
-        return node.getNodeToInsert(node, keyToAdd);
+        return node;
     }
 
     /**
