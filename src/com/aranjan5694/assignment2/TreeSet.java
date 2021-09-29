@@ -324,9 +324,85 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-//    private class NullNode<E> implements BNode<E> {
-//
-//    }
+    private class NullNode<E> implements BNode<E> {
+
+        @Override
+        public void setChildren(List<BNode<E>> children) {
+
+        }
+
+        @Override
+        public void setParent(BNode<E> parent) {
+
+        }
+
+        @Override
+        public int getChildrenSize() {
+            return 0;
+        }
+
+        @Override
+        public List<E> getKeys() {
+            return null;
+        }
+
+        @Override
+        public void addKey(E element) {
+
+        }
+
+        @Override
+        public boolean removeChild(BNode<E> child) {
+            return false;
+        }
+
+        @Override
+        public int getKeysSize() {
+            return 0;
+        }
+
+        @Override
+        public E getKey(int index) {
+            return null;
+        }
+
+        @Override
+        public List<BNode<E>> getChildren() {
+            return null;
+        }
+
+        @Override
+        public BNode<E> getParent() {
+            return null;
+        }
+
+        /**
+         * Add the child to the node
+         *
+         * @param child Node to be added as child
+         * @return true if child is successfully added
+         */
+        @Override
+        public boolean addChildNode(BNode<E> child) {
+            return false;
+        }
+
+        /**
+         * get the child at any particular index
+         *
+         * @param index Index of the child need to get
+         * @return Node at a particular index
+         */
+        @Override
+        public BNode<E> getChild(int index) {
+            return null;
+        }
+
+        @Override
+        public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
+            return null;
+        }
+    }
 
     private class Node<E> implements Comparable<Node<E>>, BNode<E> {
         private List<E> keys;
