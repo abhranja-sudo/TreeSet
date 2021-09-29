@@ -1,7 +1,7 @@
 package com.aranjan5694.assignment2;
 
-import com.aranjan5694.assignment2.model.strategy.GPAOrderingStrategy;
-import com.aranjan5694.assignment2.model.strategy.NameOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.OrderingStrategyByGPA;
+import com.aranjan5694.assignment2.model.strategy.OrderingStrategyByName;
 import com.aranjan5694.assignment2.model.strategy.OrderingContext;
 import com.aranjan5694.assignment2.model.Student;
 
@@ -16,8 +16,8 @@ public class AssignmentDriver {
     public static void main(String[] args) {
 
         //Implement a B-tree with getOrderingStrategy 3
-        OrderingContext orderingByName = new OrderingContext(new NameOrderingStrategy());
-        OrderingContext orderingByGPA = new OrderingContext(new GPAOrderingStrategy());
+        OrderingContext orderingByName = new OrderingContext(new OrderingStrategyByName());
+        OrderingContext orderingByGPA = new OrderingContext(new OrderingStrategyByGPA());
 
         java.util.TreeSet utilSet = new java.util.TreeSet();
 //        utilSet.add()

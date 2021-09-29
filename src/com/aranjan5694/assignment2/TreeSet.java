@@ -80,7 +80,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         maxNumberOfKeys = maxNumberOfChild - 1;
         minNumberOfKeys = 1;
         minNumberOfChild = minNumberOfKeys + 1;
-        root = new NullNode<>();
+        root = new NullNode<E>(comparator);
     }
 
     /**
@@ -358,7 +358,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    public class NullNode<E> implements BNode<E>{
+    public class NullNode<E> extends AbstractBNode<E>{
+
+        public NullNode(Comparator<? super E> comparator) {
+            super(null, comparator);
+        }
 
         @Override
         public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {

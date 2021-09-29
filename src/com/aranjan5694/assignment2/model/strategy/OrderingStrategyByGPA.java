@@ -4,7 +4,7 @@ import com.aranjan5694.assignment2.model.Student;
 
 import java.util.Comparator;
 
-public class GPAOrderingStrategy implements OrderingStrategy{
+public class OrderingStrategyByGPA implements OrderingStrategy{
     @Override
     public Comparator<Student> order() {
         return Comparator.comparing(Student::getGpa);

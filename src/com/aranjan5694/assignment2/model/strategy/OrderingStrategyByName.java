@@ -4,7 +4,7 @@ import com.aranjan5694.assignment2.model.Student;
 
 import java.util.Comparator;
 
-public class NameOrderingStrategy implements OrderingStrategy{
+public class OrderingStrategyByName implements OrderingStrategy{
 
     @Override
     public Comparator<Student> order() {
