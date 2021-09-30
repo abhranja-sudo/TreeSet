@@ -30,7 +30,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     private int minNumberOfChild;
     private int maxNumberOfChild;
     private int size;
-    private final int DEFAULT_BTREE_ORDER = 2;
+    private static final int DEFAULT_BTREE_ORDER = 2;
 
     /**
      * Initializes BTree with given getOrderingStrategy
