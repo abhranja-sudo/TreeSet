@@ -3,7 +3,8 @@ package com.aranjan5694.assignment2.model;
 import java.util.List;
 
 public interface BNode<E> {
-    public void setChildren(List<BNode<E>> children);
+
+    void setChildren(List<BNode<E>> children);
 
     void setParent(BNode<E> parent);
 
@@ -19,7 +20,7 @@ public interface BNode<E> {
 
     E getKey(int index);
 
-    public List<BNode<E>> getChildren();
+    List<BNode<E>> getChildren();
 
     BNode<E> getParent();
 
@@ -37,5 +38,5 @@ public interface BNode<E> {
      */
     BNode<E> getChild(int index);
 
-    BNode<E> navigateNextNode(BNode<E> node, E keyToAdd);
+    BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd);
 }

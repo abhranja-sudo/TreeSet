@@ -14,7 +14,7 @@ public class AssignmentDriver {
     public static void main(String[] args) {
 
         //Implement a B-tree with getOrderingStrategy 3
-        OrderingContext orderingByName = new OrderingContext(new DescendingGPAOrderingStrategy());
+        OrderingContext orderingByName = new OrderingContext(new AscendingNameOrderingStrategy());
 //        OrderingContext orderingByGPA = new OrderingContext(new AscendingGPAOrderingStrategy());
 
 //        java.util.TreeSet utilSet = new java.util.TreeSet();

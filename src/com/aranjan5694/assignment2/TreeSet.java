@@ -24,7 +24,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     private Comparator<? super E> comparator;
     private int order;
-    private BNode<E> root = null;
+    private BNode<E> root = new NullNode<>();
     private int minNumberOfKeys;
     private int maxNumberOfKeys;
     private int minNumberOfChild;
@@ -118,19 +118,14 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      *      * @return {@code true} if this set did not already contain the specified
      */
     public boolean add(E e){
-        if(root == null){
-            initializeRoot(e);
-            size++;
-            return true;
-        }
 
         if(isDuplicate(e)){
             return false;
         }
 
-        BNode<E> node =  root.navigateNextNode(root, e);
-
+        BNode<E> node =  root.getNodeToInsert(root, e);
         node.addKey(e);
+
         if(node.getKeysSize() > maxNumberOfKeys) {
             split(node);
         }
@@ -142,13 +137,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     private boolean isDuplicate(E e){
         boolean duplicate = false;
         long countDuplicate = this.stream()
-                .filter(e1 -> {
-                    if(compare(e, e1) == 0) {
-                        return true;
-                    }
-                    return false;
-                })
-                .count();
+            .filter(e1 -> compare(e, e1) == 0)
+            .count();
 
         if(countDuplicate >= 1){
             duplicate = true;
@@ -331,21 +321,17 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-
-    private static class NullNode<E> implements BNode<E> {
-
-        //Singleton implementation for NullNode
-        private static NullNode instance = new NullNode();
-
-        static NullNode getInstance() {
-            return instance;
-        }
+    //Singleton implementation for NullNode
+     class NullNode<E> implements BNode<E> {
 
         private NullNode() {
         }
 
         @Override
-        public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
+        public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+            if(root instanceof NullNode){
+                root = new Node<>(null);
+            }
             return node;
         }
 
@@ -458,28 +444,32 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param keyToAdd key to be added in tree
          * @return candidate Node where key can be inserted
          */
-         public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
+         public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+
+             if(root instanceof NullNode) {
+
+             }
 
              //get NULL node and use navigateNextNode() on it
              if(node.getChildrenSize() == 0) {
-                 return this.getNextNode().navigateNextNode(node, keyToAdd);
+                 return this.getNextNode().getNodeToInsert(node, keyToAdd);
              }
 
             if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
                 node = getChild(node.getKeysSize());
-                return node.navigateNextNode(node, keyToAdd);
+                return node.getNodeToInsert(node, keyToAdd);
             }
 
             if (compare(keyToAdd, node.getKey(0)) <= 0){
                 node = node.getChild(0);
-                return node.navigateNextNode(node, keyToAdd);
+                return node.getNodeToInsert(node, keyToAdd);
             }
 
             for (int i = 1; i < node.getKeysSize(); i++) {
 
                 if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
                     node = node.getChild(i);
-                    return node.navigateNextNode(node, keyToAdd);
+                    return node.getNodeToInsert(node, keyToAdd);
                 }
             }
             return null;
@@ -560,7 +550,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         public BNode<E> getNextNode() {
             if(this.getChildrenSize() == 0){
-                return NullNode.getInstance();
+                return new NullNode<>();
             }
             return this.getChild(0);
         }
