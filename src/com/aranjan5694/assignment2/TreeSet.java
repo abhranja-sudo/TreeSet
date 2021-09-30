@@ -124,10 +124,10 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return true;
         }
 
-        BNode<E> node = root;
-        while (node.getChildrenSize() != 0) {
-            node = node.navigateNextNode(node, e);
-        }
+        BNode<E> node =  root.navigateNextNode(root, e);
+
+//        node =
+
 
         boolean duplicate = false;
         long countDuplicate = node.getKeys()
@@ -326,6 +326,13 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     private class NullNode<E> implements BNode<E> {
 
+        public NullNode(Node<E> parent) {
+            this.setParent(parent);
+        }
+
+        public NullNode() {
+        }
+
         @Override
         public void setChildren(List<BNode<E>> children) {
 
@@ -400,7 +407,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         @Override
         public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
-            return null;
+            return node;
         }
     }
 
@@ -442,21 +449,27 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          */
          public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
 
+             if(node.getChildrenSize() == 0)
+                 return (BNode<E>) new NullNode<>().navigateNextNode((BNode<Object>) node, keyToAdd);
+
             if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
-                return node.getChild(node.getKeysSize());
+                node = node.getChild(node.getKeysSize());
+                return node.navigateNextNode(node, keyToAdd);
             }
 
-            if (compare(keyToAdd, node.getKey(0)) <= 0) {
-                return node.getChild(0);
+            if (compare(keyToAdd, node.getKey(0)) <= 0){
+                node = node.getChild(0);
+                return node.navigateNextNode(node, keyToAdd);
             }
 
             for (int i = 1; i < node.getKeysSize(); i++) {
 
                 if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
-                    return node.getChild(i);
+                    node = node.getChild(i);
+                    return node.navigateNextNode(node, keyToAdd);
                 }
             }
-            return node;
+            return null;
         }
 
         /**
