@@ -126,18 +126,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         BNode<E> node =  root.navigateNextNode(root, e);
 
-//        node =
-
-
-        boolean duplicate = false;
-        long countDuplicate = node.getKeys()
-                .stream()
-                .filter(s -> s.compareTo(e) == 0)
-                .count();
-        if(countDuplicate >= 1){
-            duplicate = true;
-        }
-        if(duplicate){
+        if(isDuplicate(node, e)){
             return false;
         }
 
@@ -148,6 +137,19 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         size++;
         return true;
+    }
+
+    private boolean isDuplicate(BNode<E> node, E e){
+        boolean duplicate = false;
+        long countDuplicate = node.getKeys()
+                .stream()
+                .filter(s -> s.compareTo(e) == 0)
+                .count();
+        if(countDuplicate >= 1){
+            duplicate = true;
+        }
+
+        return duplicate;
     }
 
     /**
@@ -453,6 +455,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          */
          public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
 
+             //get NULL node and use navigateNextNode() on it
              if(node.getChildrenSize() == 0) {
                  return this.getNextNode().navigateNextNode(node, keyToAdd);
              }
