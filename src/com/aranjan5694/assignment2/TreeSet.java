@@ -53,8 +53,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     public TreeSet() {
         this.comparator = null;
-        int order = DEFAULT_BTREE_ORDER;
-        initializeProperties(order);
+        initializeProperties(DEFAULT_BTREE_ORDER);
     }
 
     /**
@@ -125,11 +124,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return true;
         }
 
-        BNode<E> node =  root.navigateNextNode(root, e);
-
-        if(isDuplicate(node, e)){
+        if(isDuplicate(e)){
             return false;
         }
+
+        BNode<E> node =  root.navigateNextNode(root, e);
 
         node.addKey(e);
         if(node.getKeysSize() > maxNumberOfKeys) {
@@ -140,12 +139,17 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         return true;
     }
 
-    private boolean isDuplicate(BNode<E> node, E e){
+    private boolean isDuplicate(E e){
         boolean duplicate = false;
-        long countDuplicate = node.getKeys()
-                .stream()
-                .filter(s -> s.compareTo(e) == 0)
+        long countDuplicate = this.stream()
+                .filter(e1 -> {
+                    if(compare(e, e1) == 0) {
+                        return true;
+                    }
+                    return false;
+                })
                 .count();
+
         if(countDuplicate >= 1){
             duplicate = true;
         }
@@ -568,7 +572,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         @Override
         public int compareTo(Node<E> o) {
-            return compare(this.keys.get(0), o.getKey(0));
+            return compare(this.keys.get(0), o.keys.get(0));
         }
     }
 }
