@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 /**
  * Driver class to test assignment
  */
-public class AssignmentDriver {
+public class Client {
 
     public static void main(String[] args) {
 

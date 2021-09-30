@@ -518,6 +518,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             keys.add(element);
             keys.sort((Comparator<? super E>) comparator);
         }
+
         public int getKeysSize() {
             return keys.size();
         }
