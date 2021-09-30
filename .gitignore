@@ -1,11 +1,1 @@
-/out/production/Assignment/com/aranjan5694/assignment2/AssignmentDriver.class
-/out/production/Assignment/com/aranjan5694/assignment2/model/BNode.class
-/out/production/Assignment/com/aranjan5694/assignment2/model/strategy/GPAOrderingStrategy.class
-/out/production/Assignment/com/aranjan5694/assignment2/model/strategy/NameOrderingStrategy.class
-/out/production/Assignment/com/aranjan5694/assignment2/model/strategy/OrderingContext.class
-/out/production/Assignment/com/aranjan5694/assignment2/model/strategy/OrderingStrategy.class
-/out/production/Assignment/com/aranjan5694/assignment2/model/Student.class
-/out/production/Assignment/com/aranjan5694/assignment2/TreeSet$Node.class
-/out/production/Assignment/com/aranjan5694/assignment2/TreeSet$NullNode.class
-/out/production/Assignment/com/aranjan5694/assignment2/TreeSet$TreeIterator.class
-/out/production/Assignment/com/aranjan5694/assignment2/TreeSet.class
+*.class

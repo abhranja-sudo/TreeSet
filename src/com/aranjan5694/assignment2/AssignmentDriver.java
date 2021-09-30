@@ -1,8 +1,6 @@
 package com.aranjan5694.assignment2;
 
-import com.aranjan5694.assignment2.model.strategy.GPAOrderingStrategy;
-import com.aranjan5694.assignment2.model.strategy.NameOrderingStrategy;
-import com.aranjan5694.assignment2.model.strategy.OrderingContext;
+import com.aranjan5694.assignment2.model.strategy.*;
 import com.aranjan5694.assignment2.model.Student;
 
 import java.util.*;
@@ -16,14 +14,14 @@ public class AssignmentDriver {
     public static void main(String[] args) {
 
         //Implement a B-tree with getOrderingStrategy 3
-        OrderingContext orderingByName = new OrderingContext(new NameOrderingStrategy());
-        OrderingContext orderingByGPA = new OrderingContext(new GPAOrderingStrategy());
+        OrderingContext orderingByName = new OrderingContext(new DescendingGPAOrderingStrategy());
+//        OrderingContext orderingByGPA = new OrderingContext(new AscendingGPAOrderingStrategy());
 
 //        java.util.TreeSet utilSet = new java.util.TreeSet();
 //        utilSet.forEach(System.out::println);
 
-//        TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
         TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
+//        TreeSet<Student> bTree = new TreeSet<>(3);
 
         //Each element in the B-tree contains a Student object. A Student has a name, redid and GPA
         Student abhishek = new Student(101,"Abhishek",4.0);
@@ -35,6 +33,8 @@ public class AssignmentDriver {
         Student gaurav = new Student(115,"Gaurav",3.43);
         Student saurav = new Student(116,"Saurav",2.8);
         Student saurabh = new Student(117,"Saurabh",3.43);
+
+
 
         Student abhishek1 = new Student(101,"Abhishek1",4.0);
         Student anuj1 = new Student(102,"Anuj1",4.0);
@@ -51,6 +51,17 @@ public class AssignmentDriver {
 //        System.out.println(utilSet);
 
         // Add element in BTree
+        bTree.add(abhishek);
+        bTree.add(sanatan);
+        bTree.add(anuj);
+        bTree.add(kshitij);
+        bTree.add(hari);
+        bTree.add(aashit);
+        bTree.add(sanatan);
+        bTree.add(gaurav);
+        bTree.add(saurav);
+        bTree.add(saurabh);
+
         bTree.add(abhishek);
         bTree.add(sanatan);
         bTree.add(anuj);
