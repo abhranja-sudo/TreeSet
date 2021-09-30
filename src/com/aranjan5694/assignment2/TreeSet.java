@@ -324,13 +324,22 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    private class NullNode<E> implements BNode<E> {
 
-        public NullNode(Node<E> parent) {
-            this.setParent(parent);
+    private static class NullNode<E> implements BNode<E> {
+
+        //Singleton implementation for NullNode
+        private static NullNode instance = new NullNode();
+
+        static NullNode getInstance() {
+            return instance;
         }
 
-        public NullNode() {
+        private NullNode() {
+        }
+
+        @Override
+        public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
+            return node;
         }
 
         @Override
@@ -404,11 +413,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         public BNode<E> getChild(int index) {
             return null;
         }
-
-        @Override
-        public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
-            return node;
-        }
     }
 
     private class Node<E> implements Comparable<Node<E>>, BNode<E> {
@@ -449,11 +453,12 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          */
          public BNode<E> navigateNextNode(BNode<E> node, E keyToAdd) {
 
-             if(node.getChildrenSize() == 0)
-                 return (BNode<E>) new NullNode<>().navigateNextNode((BNode<Object>) node, keyToAdd);
+             if(node.getChildrenSize() == 0) {
+                 return this.getNextNode().navigateNextNode(node, keyToAdd);
+             }
 
             if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
-                node = node.getChild(node.getKeysSize());
+                node = getChild(node.getKeysSize());
                 return node.navigateNextNode(node, keyToAdd);
             }
 
@@ -535,6 +540,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return children;
         }
 
+        @Override
         public void setChildren(List<BNode<E>> children) {
             this.children = children;
         }
@@ -544,6 +550,14 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             this.parent = parent;
         }
 
+        public BNode<E> getNextNode() {
+            if(this.getChildrenSize() == 0){
+                return NullNode.getInstance();
+            }
+            return this.getChild(0);
+        }
+
+        @Override
         public BNode<E> getParent() {
             return parent;
         }
