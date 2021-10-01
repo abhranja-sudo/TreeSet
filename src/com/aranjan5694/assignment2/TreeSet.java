@@ -266,6 +266,34 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
+    @Override
+    public Object[] toArray() {
+        Object[] r = new Object[size()];
+        Iterator<E> it = iterator();
+        for (int i = 0; i < r.length; i++) {
+            if (! it.hasNext()) // fewer elements than expected
+                return Arrays.copyOf(r, i);
+            r[i] = it.next();
+        };
+        return r;
+    }
+
+    @Override
+    public String toString() {
+        Queue<BNode<E>> queue = new LinkedList<>();
+        queue.add(root);
+
+        StringBuilder sb = new StringBuilder("");
+
+        while (!queue.isEmpty()) {
+            BNode<E> node = queue.remove();
+            sb.append(node);
+            queue.addAll(node.getChildren());
+        }
+        return sb.toString();
+    }
+
+
     private final class TreeIterator implements Iterator<E> {
 
         private Stack<BNode<E>> nodeStack;
@@ -322,21 +350,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                     break;
                 node = node.getChild(0);
             }
-        }
-
-        @Override
-        public String toString() {
-            Queue<BNode<E>> queue = new LinkedList<>();
-            queue.add(root);
-
-            StringBuilder sb = new StringBuilder("");
-
-            while (!queue.isEmpty()) {
-                BNode<E> node = queue.remove();
-                sb.append(node);
-                queue.addAll(node.getChildren());
-            }
-            return sb.toString();
         }
     }
 
@@ -397,7 +410,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         @Override
         public List<BNode<E>> getChildren() {
-            return null;
+            return new ArrayList<>();
         }
 
         @Override
@@ -429,7 +442,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
         @Override
         public String toString() {
-            return "";
+            return " ";
         }
     }
 
