@@ -88,19 +88,19 @@ public class Client {
         for (Student student : bTree) {
             System.out.println(student);
         }
-
+//
         int k = 7;
         System.out.println(" \n get element at k...." + k);
         //Given a k,your code returns the kth element in the B-tree in lexicographical getOrderingStrategy.
         // If k is out-of-bounds throw an exception.
         System.out.println(bTree.getElement(k));
 
-//        // Out of bounds exception
-//        try{
-//            bTree.getElement(9);
-//        }catch (IndexOutOfBoundsException e){
-//            e.printStackTrace();
-//        }
+        // Out of bounds exception
+        try{
+            bTree.getElement(9);
+        }catch (IndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
 
         System.out.println("Print out the RedIds of the students that are on probation(GPA less than 2.85) that in the\n" +
                 "list from the front to the back of the list.");
