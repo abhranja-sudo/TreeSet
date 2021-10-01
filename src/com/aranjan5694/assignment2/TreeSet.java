@@ -4,6 +4,7 @@ import com.aranjan5694.assignment2.model.BNode;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  *  The aim for this TreeSet to be able to replace java.util.TreeSet. Our TreeSet uses B-Tree for implementation instead of
@@ -322,6 +323,21 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                 node = node.getChild(0);
             }
         }
+
+        @Override
+        public String toString() {
+            Queue<BNode<E>> queue = new LinkedList<>();
+            queue.add(root);
+
+            StringBuilder sb = new StringBuilder("");
+
+            while (!queue.isEmpty()) {
+                BNode<E> node = queue.remove();
+                sb.append(node);
+                queue.addAll(node.getChildren());
+            }
+            return sb.toString();
+        }
     }
 
     //Singleton implementation for NullNode
@@ -409,6 +425,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         @Override
         public BNode<E> getChild(int index) {
             return null;
+        }
+
+        @Override
+        public String toString() {
+            return "";
         }
     }
 
@@ -576,6 +597,12 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         @Override
         public int compareTo(Node<E> o) {
             return compare(this.keys.get(0), o.keys.get(0));
+        }
+
+        @Override
+        public String toString() {
+            return getKeys().stream().map(Object::toString)
+                    .collect(Collectors.joining(", "));
         }
     }
 }
