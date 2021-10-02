@@ -211,7 +211,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         for (int i = node.getKeysSize() / 2 + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
         }
-        if (node.getChildrenSize() > 0 && node.getChild(0).canRelocate())  {
+        if (node.getChildrenSize() > 0 && node.getChild(0).haveKeys())  {
             right.setChildren(new ArrayList<>());
             for (int i = node.getKeysSize() / 2 + 1; i < node.getChildrenSize(); i++) {
                 right.addChildNode(node.getChild(i));
@@ -231,7 +231,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         for (int i = 0; i < node.getKeysSize() / 2; i++) {
             left.addKey(node.getKey(i));
         }
-        if (node.getChildrenSize() > 0 && node.getChild(0).canRelocate()) {
+        if (node.getChildrenSize() > 0 && node.getChild(0).haveKeys()) {
             left.setChildren(new ArrayList<>());
             for (int i = 0; i <= node.getKeysSize() / 2; i++) {
                 left.addChildNode(node.getChild(i));
@@ -271,10 +271,10 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         Object[] r = new Object[size()];
         Iterator<E> it = iterator();
         for (int i = 0; i < r.length; i++) {
-            if (! it.hasNext()) // fewer elements than expected
+            if (! it.hasNext())
                 return Arrays.copyOf(r, i);
             r[i] = it.next();
-        };
+        }
         return r;
     }
 
@@ -283,7 +283,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         Queue<BNode<E>> queue = new LinkedList<>();
         queue.add(root);
 
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
 
         while (!queue.isEmpty()) {
             BNode<E> node = queue.remove();
@@ -337,7 +337,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
                 indexStack.push(index);
             else
                 nodeStack.pop();
-            if (node.getChild(0).canRelocate())
+            if (node.getChild(0).haveKeys())
                 pushLeftChild(node.getChild(index));
             return result;
         }
@@ -346,22 +346,18 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             while (true) {
                 nodeStack.push(node);
                 indexStack.push(0);
-                if (!node.getChild(0).canRelocate())
+                if (!node.getChild(0).haveKeys())
                     break;
                 node = node.getChild(0);
             }
         }
     }
 
-    //Singleton implementation for NullNode
      class NullNode<E> implements BNode<E> {
-
-        private NullNode() {
-        }
 
         @Override
         public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
-            if(!root.canRelocate()){
+            if(!root.haveKeys()){
                 root = new Node<>(null);
                 return (BNode<E>) root;
             }
@@ -441,7 +437,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         @Override
-        public boolean canRelocate() {
+        public boolean haveKeys() {
             return false;
         }
 
@@ -477,9 +473,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @return true if successfully removed
          */
         public boolean removeChild(BNode<E> child) {
-            if (this.getChildrenSize() == 0){
-                return false;
-            }
+
             for (int i = 0; i < this.getChildrenSize(); i++) {
                 if (children.get(i).equals(child)) {
                     shiftLeft(i + 1, children);
@@ -511,7 +505,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
 
              //get NULL node and use navigateNextNode() on it
-             if(node.getChildrenSize() == 0 || !node.getChild(0).canRelocate()) {
+             if(!node.getChild(0).haveKeys()) {
                  return this.getNextNode().getNodeToInsert(node, keyToAdd);
              }
 
@@ -536,7 +530,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         @Override
-        public boolean canRelocate() {
+        public boolean haveKeys() {
             return true;
         }
 
@@ -606,9 +600,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         public BNode<E> getNextNode() {
-            if(this.getChildrenSize() == 0){
-                return new NullNode<>();
-            }
             return this.getChild(0);
         }
 

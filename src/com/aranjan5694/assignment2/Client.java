@@ -84,6 +84,8 @@ public class Client {
         bTree.add(saurav1);
         bTree.add(saurabh1);
 
+        System.out.println(bTree);
+
         System.out.println("iterator running  ... ");
         for (Student student : bTree) {
             System.out.println(student);
@@ -114,7 +116,7 @@ public class Client {
 
 
 
-//        bTree.forEach(System.out::println);
+        bTree.forEach(System.out::println);
     }
 
     public static void printStudentOnProbation(TreeSet<Student> bTree){

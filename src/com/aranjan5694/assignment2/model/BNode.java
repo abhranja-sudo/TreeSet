@@ -40,5 +40,5 @@ public interface BNode<E> {
 
     BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd);
 
-    boolean canRelocate();
+    boolean haveKeys();
 }
