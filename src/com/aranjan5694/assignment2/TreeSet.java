@@ -149,15 +149,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     }
 
     /**
-     * Create root the first time add key called
-     * @param key Key to be added to newly created root
-     */
-    private void initializeRoot(E key){
-        root = new Node<>(null);
-        root.addKey(key);
-    }
-
-    /**
      * splits the node. called when keys size is greater than maximum keys allowed in node
      * @param node Node to split
      */
@@ -211,7 +202,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         for (int i = node.getKeysSize() / 2 + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
         }
-        if (node.getChildrenSize() > 0 && node.getChild(0).haveKeys())  {
+        if (node.getChild(0).haveKeys())  {
             right.setChildren(new ArrayList<>());
             for (int i = node.getKeysSize() / 2 + 1; i < node.getChildrenSize(); i++) {
                 right.addChildNode(node.getChild(i));
@@ -231,7 +222,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         for (int i = 0; i < node.getKeysSize() / 2; i++) {
             left.addKey(node.getKey(i));
         }
-        if (node.getChildrenSize() > 0 && node.getChild(0).haveKeys()) {
+        if (node.getChild(0).haveKeys()) {
             left.setChildren(new ArrayList<>());
             for (int i = 0; i <= node.getKeysSize() / 2; i++) {
                 left.addChildNode(node.getChild(i));
