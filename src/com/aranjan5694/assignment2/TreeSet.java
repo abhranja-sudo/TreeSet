@@ -25,7 +25,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     private Comparator<? super E> comparator;
     private int order;
-    private BNode<E> root = new NullNode<>();
+    private BNode<E> root;
     private int minNumberOfKeys;
     private int maxNumberOfKeys;
     private int minNumberOfChild;
@@ -76,6 +76,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param order denotes maximum number of child a node can have
      */
     private void initializeProperties(int order){
+        root = new NullNode<>();
         maxNumberOfChild = order;
         maxNumberOfKeys = maxNumberOfChild - 1;
         minNumberOfKeys = 1;
