@@ -39,4 +39,6 @@ public interface BNode<E> {
     BNode<E> getChild(int index);
 
     BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd);
+
+    boolean canRelocate();
 }
