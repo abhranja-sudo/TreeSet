@@ -506,7 +506,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
              //get NULL node and use navigateNextNode() on it
              if(!node.getChild(0).haveKeys()) {
-                 return this.getNextNode().getNodeToInsert(node, keyToAdd);
+                 return this.getChild(0).getNodeToInsert(node, keyToAdd);
              }
 
             if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
@@ -597,10 +597,6 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         @Override
         public void setParent(BNode<E> parent) {
             this.parent = parent;
-        }
-
-        public BNode<E> getNextNode() {
-            return this.getChild(0);
         }
 
         @Override
