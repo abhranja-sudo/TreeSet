@@ -441,13 +441,15 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     private class Node<E> implements Comparable<Node<E>>, BNode<E> {
         private List<E> keys;
-        private int keysSize = 0;
+        private int keysSize;
         private List<BNode<E>> children;
-        private int childrenSize = 0;
+        private int childrenSize;
         private BNode<E> parent;
         public Node(BNode<E> parent) {
             this.keys = new ArrayList<>();
+            keysSize = 0;
             this.children = new ArrayList<>();
+            childrenSize = 0;
             this.parent = parent;
             children = new ArrayList<>(order);
             initChildrenWithNullNode(children);
