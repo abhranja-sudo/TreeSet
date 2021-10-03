@@ -1,11 +1,14 @@
 package com.aranjan5694.assignment2;
 
 import com.aranjan5694.assignment2.model.Student;
-import com.aranjan5694.assignment2.model.strategy.*;
+import com.aranjan5694.assignment2.model.strategy.AscendingGPAOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.AscendingNameOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.DescendingGPAOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.DescendingNameOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.OrderingContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -102,10 +105,6 @@ public class testStrategyPattern {
 
         assertEquals(expectedOrder, actualOrder);
 
-    }
-
-    void populateData(TreeSet<Student> set){
-        set.addAll(testData);
     }
 
 }
