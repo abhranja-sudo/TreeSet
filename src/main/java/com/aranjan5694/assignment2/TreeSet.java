@@ -16,6 +16,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  *  The aim for this TreeSet to be able to replace java.util.TreeSet. Our TreeSet uses B-Tree for implementation instead of
@@ -467,9 +468,9 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         private void initChildrenWithNullNode(List<BNode<E>> children) {
-            for(int i = 0; i < order; i++) {
-                children.add(new NullNode<>());
-            }
+            IntStream.range(0, order)
+                    .<BNode<E>>mapToObj(i -> new NullNode<>())
+                    .forEach(children::add);
         }
 
         /**
