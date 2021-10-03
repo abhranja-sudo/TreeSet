@@ -1,6 +1,5 @@
 package com.aranjan5694.assignment2;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,25 +50,26 @@ class TreeSetTest {
     }
 
 
-    //Duplicate entry shouldn't be allowed as it is set
+    //Duplicate entry shouldn't be allowed as it's a set
     @Test
     void testDuplicateItems() {
         Assertions.assertTrue(bTree.add(10000));
         Assertions.assertFalse(bTree.add(10000));
     }
 
-    //
+    //For Each should return element in reverse
     @Test
     void testForEach() {
         List<Integer> actualOrder = new ArrayList<>();
         bTree.forEach(actualOrder::add);
 
-        List<Integer> expectedOrder = reverse(Arrays.stream(testData)
+        List<Integer> expectedOrder =
+                reverse(Arrays.stream(testData)
                 .boxed()
                 .sorted())
                 .collect(Collectors.toList());
 
-        assertEquals(actualOrder, expectedOrder);
+        assertEquals(expectedOrder, actualOrder);
     }
 
 
