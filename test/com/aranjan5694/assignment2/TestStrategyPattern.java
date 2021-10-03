@@ -12,7 +12,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class testStrategyPattern {
+public class TestStrategyPattern {
 
     private static final int ORDER = 3;
 
