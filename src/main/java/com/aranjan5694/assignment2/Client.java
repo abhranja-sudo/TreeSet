@@ -4,7 +4,7 @@ import com.aranjan5694.assignment2.model.Student;
 import com.aranjan5694.assignment2.model.strategy.AscendingNameOrderingStrategy;
 import com.aranjan5694.assignment2.model.strategy.OrderingContext;
 
-import java.util.*;
+import java.util.LinkedList;
 import java.util.stream.Stream;
 
 /**
@@ -16,13 +16,8 @@ public class Client {
 
         //Implement a B-tree with getOrderingStrategy 3
         OrderingContext orderingByName = new OrderingContext(new AscendingNameOrderingStrategy());
-//        OrderingContext orderingByGPA = new OrderingContext(new AscendingGPAOrderingStrategy());
-
-//        java.util.TreeSet utilSet = new java.util.TreeSet();
-//        utilSet.forEach(System.out::println);
 
         TreeSet<Student> bTree = new TreeSet<>(3, orderingByName.getOrderingStrategy());
-//        TreeSet<Student> bTree = new TreeSet<>(3);
 
         //Each element in the B-tree contains a Student object. A Student has a name, redid and GPA
         Student abhishek = new Student(101,"Abhishek",4.0);
@@ -46,10 +41,6 @@ public class Client {
         Student gaurav1 = new Student(115,"Gaurav1",3.43);
         Student saurav1 = new Student(116,"Saurav1",2.8);
         Student saurabh1 = new Student(117,"Saurabh1",3.43);
-//        utilSet.add(abhishek);
-//        utilSet.add(anuj);
-//        utilSet.add(hari);
-//        System.out.println(utilSet);
 
         // Add element in BTree
         bTree.add(abhishek);
@@ -62,7 +53,17 @@ public class Client {
         bTree.add(gaurav);
         bTree.add(saurav);
         bTree.add(saurabh);
+        bTree.add(abhishek1);
+        bTree.add(sanatan1);
+        bTree.add(anuj1);
+        bTree.add(kshitij1);
+        bTree.add(hari1);
+        bTree.add(aashit1);
+        bTree.add(gaurav1);
+        bTree.add(saurav1);
+        bTree.add(saurabh1);
 
+        //Duplicate items, shouldn't get accepted in the set
         bTree.add(abhishek);
         bTree.add(sanatan);
         bTree.add(anuj);
@@ -74,33 +75,24 @@ public class Client {
         bTree.add(saurav);
         bTree.add(saurabh);
 
-        bTree.add(abhishek1);
-        bTree.add(sanatan1);
-        bTree.add(anuj1);
-        bTree.add(kshitij1);
-        bTree.add(hari1);
-        bTree.add(aashit1);
-        bTree.add(sanatan1);
-        bTree.add(gaurav1);
-        bTree.add(saurav1);
-        bTree.add(saurabh1);
-
         System.out.println(bTree);
 
         System.out.println("iterator running  ... ");
         for (Student student : bTree) {
             System.out.println(student);
         }
-//
-        int k = 7;
-        System.out.println(" \n get element at k...." + k);
+
         //Given a k,your code returns the kth element in the B-tree in lexicographical getOrderingStrategy.
         // If k is out-of-bounds throw an exception.
+
+        int k = 7;
+        System.out.println(" \n get element at k...." + k);
+
         System.out.println(bTree.getElement(k));
 
         // Out of bounds exception
         try{
-            bTree.getElement(9);
+            bTree.getElement(29);
         }catch (IndexOutOfBoundsException e){
             e.printStackTrace();
         }
@@ -114,8 +106,6 @@ public class Client {
                 "the list");
 
         printStudentWithGpaInReverseOrder(4.0, bTree);
-
-
 
         bTree.forEach(System.out::println);
     }

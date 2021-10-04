@@ -4,7 +4,6 @@ import com.aranjan5694.assignment2.model.BNode;
 
 import java.util.AbstractSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -154,7 +153,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             .filter(e1 -> compare(e, e1) == 0)
             .count();
 
-        if(countDuplicate >= 1){
+        if(countDuplicate > 0){
             duplicate = true;
         }
 
@@ -251,7 +250,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * Performs the given action for each element of the {@code Iterable}
      * until all elements have been processed or the action throws an
      * exception.  Unless otherwise specified by the implementing class,
-     * actions are performed in the order of iteration (if an iteration order
+     * actions are performed in the reverse order of iteration (if an iteration order
      * is specified).  Exceptions thrown by the action are relayed to the
      * caller.
      * @param action The action to be performed for each element
@@ -272,14 +271,12 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     @Override
     public Object[] toArray() {
-        Object[] r = new Object[size()];
+        Object[] elementArray = new Object[size()];
         Iterator<E> it = iterator();
-        for (int i = 0; i < r.length; i++) {
-            if (! it.hasNext())
-                return Arrays.copyOf(r, i);
-            r[i] = it.next();
+        for (int i = 0; i < elementArray.length; i++) {
+            elementArray[i] = it.next();
         }
-        return r;
+        return elementArray;
     }
 
     @Override
@@ -360,7 +357,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      class NullNode<E> implements BNode<E> {
 
         @Override
-        public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+        public BNode<E> getNodeToInsert(BNode<E> node, E elementToAdd) {
             if(!root.haveKeys()){
                 root = new Node<>(null);
                 return (BNode<E>) root;
@@ -503,33 +500,33 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         /**
-         * get next candidate node
+         * get next candidate node where
          * @param node Node to compare key with
-         * @param keyToAdd key to be added in tree
+         * @param elementToAdd key to be added in tree
          * @return candidate Node where key can be inserted
          */
-         public BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd) {
+         public BNode<E> getNodeToInsert(BNode<E> node, E elementToAdd) {
 
              //get NULL node and use navigateNextNode() on it
              if(!node.getChild(0).haveKeys()) {
-                 return this.getChild(0).getNodeToInsert(node, keyToAdd);
+                 return this.getChild(0).getNodeToInsert(node, elementToAdd);
              }
 
-            if(compare(keyToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
+            if(compare(elementToAdd, node.getKey(node.getKeysSize() - 1)) > 0) {
                 node = getChild(node.getKeysSize());
-                return node.getNodeToInsert(node, keyToAdd);
+                return node.getNodeToInsert(node, elementToAdd);
             }
 
-            if (compare(keyToAdd, node.getKey(0)) <= 0){
+            if (compare(elementToAdd, node.getKey(0)) <= 0){
                 node = node.getChild(0);
-                return node.getNodeToInsert(node, keyToAdd);
+                return node.getNodeToInsert(node, elementToAdd);
             }
 
             for (int i = 1; i < node.getKeysSize(); i++) {
 
-                if (compare(keyToAdd, node.getKey(i)) <= 0 && compare(keyToAdd, node.getKey(i - 1)) > 0) {
+                if (compare(elementToAdd, node.getKey(i)) <= 0 && compare(elementToAdd, node.getKey(i - 1)) > 0) {
                     node = node.getChild(i);
-                    return node.getNodeToInsert(node, keyToAdd);
+                    return node.getNodeToInsert(node, elementToAdd);
                 }
             }
             return null;
