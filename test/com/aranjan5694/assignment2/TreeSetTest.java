@@ -92,8 +92,7 @@ class TreeSetTest {
 
     }
 
-    public static <T> Stream<T> reverse(Stream<T> stream)
-    {
+    public static <T> Stream<T> reverse(Stream<T> stream) {
         LinkedList<T> stack = new LinkedList<>();
         stream.forEach(stack::push);
         return stack.stream();

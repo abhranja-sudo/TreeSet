@@ -2,11 +2,11 @@ package com.aranjan5694.assignment2.model;
 
 import java.util.List;
 
-public interface BNode<E> {
+public interface INode<E> {
 
-    void setChildren(List<BNode<E>> children);
+    void setChildren(List<INode<E>> children);
 
-    void setParent(BNode<E> parent);
+    void setParent(INode<E> parent);
 
     int getChildrenSize();
 
@@ -14,31 +14,31 @@ public interface BNode<E> {
 
     void addKey(E element);
 
-    boolean removeChild(BNode<E> child);
+    boolean removeChild(INode<E> child);
 
     int getKeysSize();
 
     E getKey(int index);
 
-    List<BNode<E>> getChildren();
+    List<INode<E>> getChildren();
 
-    BNode<E> getParent();
+    INode<E> getParent();
 
     /**
      * Add the child to the node
      * @param child Node to be added as child
      * @return true if child is successfully added
      */
-    boolean addChildNode(BNode<E> child);
+    boolean addChildNode(INode<E> child);
 
     /**
      * get the child at any particular index
      * @param index Index of the child need to get
      * @return Node at a particular index
      */
-    BNode<E> getChild(int index);
+    INode<E> getChild(int index);
 
-    BNode<E> getNodeToInsert(BNode<E> node, E keyToAdd);
+    INode<E> getNodeToInsert(INode<E> node, E keyToAdd);
 
     boolean haveKeys();
 }
