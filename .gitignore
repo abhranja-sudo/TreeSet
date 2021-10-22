@@ -1,1 +1,9 @@
 *.class
+/target/Assignment-1.0-SNAPSHOT.jar
+/target/surefire-reports/com.aranjan5694.assignment2.TestStrategyPattern.txt
+/target/surefire-reports/com.aranjan5694.assignment2.TreeSetTest.txt
+/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+/target/maven-archiver/pom.properties
+/target/surefire-reports/TEST-com.aranjan5694.assignment2.TestStrategyPattern.xml
+/target/surefire-reports/TEST-com.aranjan5694.assignment2.TreeSetTest.xml
