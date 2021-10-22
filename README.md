@@ -20,7 +20,7 @@ logarithmic amortized time.
 The following **Design Patterns** used in implementation:
 
 * **Iterator Pattern**  to implement external and internal Iterator
-* **Null Object Pattern** to remove null checks to see if you are at the end of the B-Tree
-* **Strategy Pattern**  to allow clients to how your B-Tree orders the elements
+* **Null Object Pattern** to remove null check
+* **Strategy Pattern**  to allow clients to control how B-Tree orders the elements
 
 Demonstration for strategy pattern has been included
