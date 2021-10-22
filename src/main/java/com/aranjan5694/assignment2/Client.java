@@ -1,8 +1,8 @@
-package com.aranjan5694;
+package com.aranjan5694.assignment2;
 
-import com.aranjan5694.model.Student;
-import com.aranjan5694.model.strategy.AscendingNameOrderingStrategy;
-import com.aranjan5694.model.strategy.OrderingContext;
+import com.aranjan5694.assignment2.model.Student;
+import com.aranjan5694.assignment2.model.strategy.AscendingNameOrderingStrategy;
+import com.aranjan5694.assignment2.model.strategy.OrderingContext;
 
 import java.util.LinkedList;
 import java.util.stream.Stream;

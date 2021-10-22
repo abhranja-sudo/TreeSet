@@ -1,4 +1,6 @@
-package com.aranjan5694;
+package com.aranjan5694.assignment2;
+
+import com.aranjan5694.assignment2.model.INode;
 
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      */
     private Comparator<? super E> comparator;
     private int order;
-    private com.aranjan5694.model.Node<E> root;
+    private INode<E> root;
     private int minNumberOfKeys;
     private int maxNumberOfKeys;
     private int minNumberOfChild;
@@ -136,7 +138,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return false;
         }
 
-        com.aranjan5694.model.Node<E> node = root.getNodeToInsert(root, e);
+        INode<E> node = root.getNodeToInsert(root, e);
         node.addKey(e);
 
         if (node.getKeysSize() > maxNumberOfKeys) {
@@ -168,15 +170,15 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      *
      * @param node Node to split
      */
-    private void split(com.aranjan5694.model.Node<E> node) {
+    private void split(INode<E> node) {
 
-        com.aranjan5694.model.Node<E> left = createLeft(node);
-        com.aranjan5694.model.Node<E> right = createRight(node);
+        INode<E> left = createLeft(node);
+        INode<E> right = createRight(node);
 
         if (node.getParent() == null) {
             createNewRoot(node, left, right);
         } else {
-            com.aranjan5694.model.Node<E> parent = node.getParent();
+            INode<E> parent = node.getParent();
             parent.addKey(node.getKey(node.getKeysSize() / 2));
             parent.removeChild(node);
             parent.addChildNode(left);
@@ -196,8 +198,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param left  add left node to the child of node
      * @param right right node to be added as child of node
      */
-    private void createNewRoot(com.aranjan5694.model.Node<E> node, com.aranjan5694.model.Node<E> left, com.aranjan5694.model.Node<E> right) {
-        com.aranjan5694.model.Node<E> newRoot = new Node(null);
+    private void createNewRoot(INode<E> node, INode<E> left, INode<E> right) {
+        INode<E> newRoot = new Node<>(null);
         newRoot.addKey(node.getKey(node.getKeysSize() / 2));
         node.setParent(newRoot);
         root = newRoot;
@@ -214,8 +216,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param node Node that is splitting up
      * @return right node
      */
-    private com.aranjan5694.model.Node<E> createRight(com.aranjan5694.model.Node<E> node) {
-        com.aranjan5694.model.Node<E> right = new Node(null);
+    private INode<E> createRight(INode<E> node) {
+        INode<E> right = new Node<>(null);
         for (int i = node.getKeysSize() / 2 + 1; i < node.getKeysSize(); i++) {
             right.addKey(node.getKey(i));
         }
@@ -235,8 +237,8 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
      * @param node Node that is splitting up
      * @return left node
      */
-    private com.aranjan5694.model.Node<E> createLeft(com.aranjan5694.model.Node<E> node) {
-        com.aranjan5694.model.Node<E> left = new Node(null);
+    private INode<E> createLeft(INode<E> node) {
+        INode<E> left = new Node<>(null);
         for (int i = 0; i < node.getKeysSize() / 2; i++) {
             left.addKey(node.getKey(i));
         }
@@ -288,13 +290,13 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
     @Override
     public String toString() {
         //Level-Order Traversal
-        Queue<com.aranjan5694.model.Node<E>> queue = new LinkedList<>();
+        Queue<INode<E>> queue = new LinkedList<>();
         queue.add(root);
 
         StringBuilder sb = new StringBuilder();
 
         while (!queue.isEmpty()) {
-            com.aranjan5694.model.Node<E> node = queue.remove();
+            INode<E> node = queue.remove();
             sb.append(node);
             queue.addAll(node.getChildren());
         }
@@ -304,7 +306,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
 
     private final class TreeIterator implements Iterator<E> {
 
-        private Stack<com.aranjan5694.model.Node<E>> nodeStack;
+        private Stack<INode<E>> nodeStack;
         private Stack<Integer> indexStack;
 
         public TreeIterator() {
@@ -337,7 +339,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             if (!hasNext())
                 throw new NoSuchElementException();
 
-            com.aranjan5694.model.Node<E> node = nodeStack.peek();
+            INode<E> node = nodeStack.peek();
             int index = indexStack.pop();
             E result = node.getKey(index);
             index++;
@@ -350,7 +352,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return result;
         }
 
-        private void pushLeftChild(com.aranjan5694.model.Node<E> node) {
+        private void pushLeftChild(INode<E> node) {
             while (true) {
                 nodeStack.push(node);
                 indexStack.push(0);
@@ -361,24 +363,24 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    class NullNode<E> implements com.aranjan5694.model.Node<E> {
+    class NullNode<E> implements INode<E> {
 
         @Override
-        public com.aranjan5694.model.Node<E> getNodeToInsert(com.aranjan5694.model.Node<E> node, E elementToAdd) {
+        public INode<E> getNodeToInsert(INode<E> node, E elementToAdd) {
             if (!root.haveKeys()) {
-                root = new TreeSet.Node(null);
-                return (com.aranjan5694.model.Node<E>) root;
+                root = new Node<>(null);
+                return (INode<E>) root;
             }
             return node;
         }
 
         @Override
-        public void setChildren(List<com.aranjan5694.model.Node<E>> children) {
+        public void setChildren(List<INode<E>> children) {
 
         }
 
         @Override
-        public void setParent(com.aranjan5694.model.Node<E> parent) {
+        public void setParent(INode<E> parent) {
 
         }
 
@@ -398,7 +400,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         @Override
-        public boolean removeChild(com.aranjan5694.model.Node<E> child) {
+        public boolean removeChild(INode<E> child) {
             return false;
         }
 
@@ -413,12 +415,12 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
 
         @Override
-        public List<com.aranjan5694.model.Node<E>> getChildren() {
+        public List<INode<E>> getChildren() {
             return new ArrayList<>();
         }
 
         @Override
-        public com.aranjan5694.model.Node<E> getParent() {
+        public INode<E> getParent() {
             return null;
         }
 
@@ -429,7 +431,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @return true if child is successfully added
          */
         @Override
-        public boolean addChildNode(com.aranjan5694.model.Node<E> child) {
+        public boolean addChildNode(INode<E> child) {
             return false;
         }
 
@@ -440,7 +442,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @return Node at a particular index
          */
         @Override
-        public com.aranjan5694.model.Node<E> getChild(int index) {
+        public INode<E> getChild(int index) {
             return null;
         }
 
@@ -455,14 +457,14 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
         }
     }
 
-    private class Node<E> implements Comparable<Node>, com.aranjan5694.model.Node<E> {
+    private class Node<E> implements Comparable<Node<E>>, INode<E> {
         private List<E> keys;
         private int keysSize;
-        private List<com.aranjan5694.model.Node<E>> children;
+        private List<INode<E>> children;
         private int childrenSize;
-        private com.aranjan5694.model.Node<E> parent;
+        private INode<E> parent;
 
-        public Node(com.aranjan5694.model.Node<E> parent) {
+        public Node(INode<E> parent) {
             this.keys = new ArrayList<>();
             keysSize = 0;
             this.children = new ArrayList<>();
@@ -472,9 +474,9 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             initChildrenWithNullNode(children);
         }
 
-        private void initChildrenWithNullNode(List<com.aranjan5694.model.Node<E>> children) {
+        private void initChildrenWithNullNode(List<INode<E>> children) {
             IntStream.range(0, order)
-                    .<com.aranjan5694.model.Node<E>>mapToObj(i -> new NullNode<>())
+                    .<INode<E>>mapToObj(i -> new NullNode<>())
                     .forEach(children::add);
         }
 
@@ -484,7 +486,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param child Node to removed
          * @return true if successfully removed
          */
-        public boolean removeChild(com.aranjan5694.model.Node<E> child) {
+        public boolean removeChild(INode<E> child) {
 
             for (int i = 0; i < this.getChildrenSize(); i++) {
                 if (children.get(i).equals(child)) {
@@ -502,7 +504,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          *
          * @param index from where shifting is to be done
          */
-        void shiftLeft(int index, List<com.aranjan5694.model.Node<E>> list) {
+        void shiftLeft(int index, List<INode<E>> list) {
             while (index < list.size()) {
                 list.set(index - 1, list.get(index));
                 index++;
@@ -516,7 +518,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param elementToAdd key to be added in tree
          * @return candidate Node where key can be inserted
          */
-        public com.aranjan5694.model.Node<E> getNodeToInsert(com.aranjan5694.model.Node<E> node, E elementToAdd) {
+        public INode<E> getNodeToInsert(INode<E> node, E elementToAdd) {
 
             //get NULL node and use getNodeToInsert() on it
             if (!node.getChild(0).haveKeys()) {
@@ -554,11 +556,11 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param child Node to be added as child
          * @return true if child is successfully added
          */
-        public boolean addChildNode(com.aranjan5694.model.Node<E> child) {
+        public boolean addChildNode(INode<E> child) {
             child.setParent(this);
             children.add(childrenSize, child);
             childrenSize++;
-            Collections.sort((List<Node>) (List<?>) children);
+            Collections.sort((List<Node<E>>) (List<?>) children);
             return true;
         }
 
@@ -568,7 +570,7 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
          * @param index Index of the child need to get
          * @return Node at a particular index
          */
-        public com.aranjan5694.model.Node<E> getChild(int index) {
+        public INode<E> getChild(int index) {
             if (index >= children.size()) {
                 return null;
             }
@@ -601,27 +603,27 @@ public class TreeSet<E extends Comparable<E>> extends AbstractSet<E> {
             return children.size();
         }
 
-        public List<com.aranjan5694.model.Node<E>> getChildren() {
+        public List<INode<E>> getChildren() {
             return children;
         }
 
         @Override
-        public void setChildren(List<com.aranjan5694.model.Node<E>> children) {
+        public void setChildren(List<INode<E>> children) {
             this.children = children;
         }
 
         @Override
-        public void setParent(com.aranjan5694.model.Node<E> parent) {
+        public void setParent(INode<E> parent) {
             this.parent = parent;
         }
 
         @Override
-        public com.aranjan5694.model.Node<E> getParent() {
+        public INode<E> getParent() {
             return parent;
         }
 
         @Override
-        public int compareTo(Node o) {
+        public int compareTo(Node<E> o) {
             return compare(this.keys.get(0), o.keys.get(0));
         }
 

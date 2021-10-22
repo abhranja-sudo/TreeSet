@@ -1,4 +1,4 @@
-package com.aranjan5694;
+package com.aranjan5694.assignment2;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

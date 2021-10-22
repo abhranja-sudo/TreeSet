@@ -1,4 +1,4 @@
-package com.aranjan5694.model;
+package com.aranjan5694.assignment2.model;
 
 /**
  * A Student here has a name, redid and a GPA.
