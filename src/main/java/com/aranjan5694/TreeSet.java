@@ -1,6 +1,6 @@
-package com.aranjan5694.assignment2;
+package com.aranjan5694;
 
-import com.aranjan5694.assignment2.model.INode;
+import com.aranjan5694.model.INode;
 
 import java.util.AbstractSet;
 import java.util.ArrayList;

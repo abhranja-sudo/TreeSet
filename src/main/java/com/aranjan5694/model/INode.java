@@ -1,4 +1,4 @@
-package com.aranjan5694.assignment2.model;
+package com.aranjan5694.model;
 
 import java.util.List;
 
