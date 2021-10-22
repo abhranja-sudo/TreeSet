@@ -1,12 +1,12 @@
-package com.aranjan5694.assignment2.model;
+package com.aranjan5694.model;
 
 import java.util.List;
 
-public interface INode<E> {
+public interface Node<E> {
 
-    void setChildren(List<INode<E>> children);
+    void setChildren(List<Node<E>> children);
 
-    void setParent(INode<E> parent);
+    void setParent(Node<E> parent);
 
     int getChildrenSize();
 
@@ -14,31 +14,31 @@ public interface INode<E> {
 
     void addKey(E element);
 
-    boolean removeChild(INode<E> child);
+    boolean removeChild(Node<E> child);
 
     int getKeysSize();
 
     E getKey(int index);
 
-    List<INode<E>> getChildren();
+    List<Node<E>> getChildren();
 
-    INode<E> getParent();
+    Node<E> getParent();
 
     /**
      * Add the child to the node
      * @param child Node to be added as child
      * @return true if child is successfully added
      */
-    boolean addChildNode(INode<E> child);
+    boolean addChildNode(Node<E> child);
 
     /**
      * get the child at any particular index
      * @param index Index of the child need to get
      * @return Node at a particular index
      */
-    INode<E> getChild(int index);
+    Node<E> getChild(int index);
 
-    INode<E> getNodeToInsert(INode<E> node, E keyToAdd);
+    Node<E> getNodeToInsert(Node<E> node, E keyToAdd);
 
     boolean haveKeys();
 }

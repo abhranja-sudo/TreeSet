@@ -1,11 +1,11 @@
-package com.aranjan5694.assignment2;
+package com.aranjan5694;
 
-import com.aranjan5694.assignment2.model.Student;
-import com.aranjan5694.assignment2.model.strategy.AscendingGPAOrderingStrategy;
-import com.aranjan5694.assignment2.model.strategy.AscendingNameOrderingStrategy;
-import com.aranjan5694.assignment2.model.strategy.DescendingGPAOrderingStrategy;
-import com.aranjan5694.assignment2.model.strategy.DescendingNameOrderingStrategy;
-import com.aranjan5694.assignment2.model.strategy.OrderingContext;
+import com.aranjan5694.model.Student;
+import com.aranjan5694.model.strategy.AscendingGPAOrderingStrategy;
+import com.aranjan5694.model.strategy.AscendingNameOrderingStrategy;
+import com.aranjan5694.model.strategy.DescendingGPAOrderingStrategy;
+import com.aranjan5694.model.strategy.DescendingNameOrderingStrategy;
+import com.aranjan5694.model.strategy.OrderingContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
