@@ -1,6 +1,6 @@
 # TreeSet
 
-The aim for this TreeSet to be able to replace java.util.TreeSet for systems that write large blocks of data. It is most commonly used in database and file systems.. 
+This implementation of TreeSet uses BTree that is largely used for systems that write large blocks of data. It is most commonly used in database and file systems.. 
 
 Our TreeSet uses **B-Tree** for implementation instead of
 Red-Black Tree that java.util.TreeSet uses.
